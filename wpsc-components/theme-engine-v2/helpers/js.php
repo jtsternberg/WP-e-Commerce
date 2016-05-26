@@ -14,7 +14,7 @@ function _wpsc_te2_register_scripts() {
 			wpsc_locate_asset_uri( $script_data['path'] ),
 			$script_data['dependencies'],
 			$script_data['version'],
-			1
+			! isset( $script_data['in_footer'] ) || $script_data['in_footer']
 		);
 	}
 
