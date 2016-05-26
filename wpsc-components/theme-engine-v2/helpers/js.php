@@ -14,7 +14,7 @@ function _wpsc_te2_register_scripts() {
 			wpsc_locate_asset_uri( $script_data['path'] ),
 			$script_data['dependencies'],
 			$script_data['version'],
-			1
+			! isset( $script_data['in_footer'] ) || $script_data['in_footer']
 		);
 	}
 
@@ -140,7 +140,9 @@ function wpsc_localize_script( $handle, $property_name, $data, $add_to_namespace
 	global $wp_scripts;
 
 	if ( $add_to_namespace ) {
-		$property_name = 'WPSC.' . $property_name;
+
+		// Make sure this variable does not break the WPSC namespace.
+		$property_name = 'WPSC.' . sanitize_html_class( maybe_serialize( $property_name ) );
 	}
 
 	$result = wp_localize_script( $handle, $property_name, $data );
