@@ -104,7 +104,16 @@ function wpsc_get_add_to_cart_form( $id = null ) {
 		$id = wpsc_get_product_id();
 	}
 
+	// Enqueue Cart Notifications script.
+	wpsc_enqueue_script( 'wpsc-cart-notifications', array(
+		'property_name' => 'cartNotifications',
+		'data' => array(
+			'strings' => array(),
+		),
+	) );
+
 	$args = wpsc_get_add_to_cart_form_args( $id );
+
 	return apply_filters( 'wpsc_get_add_to_cart_form', wpsc_get_form_output( $args ) );
 }
 
@@ -764,7 +773,7 @@ function wpsc_get_checkout_payment_method_form_args() {
 			),
 		),
 	);
-	
+
 	$args = apply_filters( 'wpsc_get_checkout_payment_method_form_args', _wpsc_convert_checkout_payment_method_form_args( $args ) );
 	return $args;
 }
