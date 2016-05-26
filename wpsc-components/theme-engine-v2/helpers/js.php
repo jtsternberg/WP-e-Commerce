@@ -142,7 +142,7 @@ function wpsc_localize_script( $handle, $property_name, $data, $add_to_namespace
 	if ( $add_to_namespace ) {
 
 		// Make sure this variable does not break the WPSC namespace.
-		$property_name = 'WPSC.' . sanitize_html_class( substr( serialize( $property_name ), 0, 60 ) );
+		$property_name = 'WPSC.' . sanitize_html_class( maybe_serialize( $property_name ) );
 	}
 
 	$result = wp_localize_script( $handle, $property_name, $data );
