@@ -211,7 +211,7 @@ class WPSC_Template_Engine {
 	 *
 	 * @since 4.0
 	 * @param string $handle      Name of the core script to queue.
-	 * @param array  $script_data (Optional) data to send to wp_localize_script under the WPEC namespace.
+	 * @param array  $script_data (Optional) data to send to wp_localize_script under the WPSC namespace.
 	 */
 	public function register_queued_script( $handle, $script_data = array() ) {
 		$this->queued_scripts[ $handle ] = $script_data;
