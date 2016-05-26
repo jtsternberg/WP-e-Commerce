@@ -1,96 +1,113 @@
-
 /**
  * WP eCommerce Fancy Notifications JS
  *
  * @since  4.0
  */
 
-var WPEC_Fancy_Notifications;
+window.WPEC_Fancy_Notifications = window.WPEC_Fancy_Notifications || {};
 
-( function( $ ) {
+( function( window, document, $, notifs, undefined ) {
+	'use strict';
 
-	WPEC_Fancy_Notifications = {
+	/**
+	 * Cache all selectors.
+	 *
+	 * @since  4.0
+	 */
+	notifs.cache = function() {
+		notifs.$              = {};
+		notifs.$.notif        = $( document.getElementById( 'fancy_notification' ) );
+		notifs.$.animation    = $( 'div.wpsc_loading_animation' );
+		notifs.$.loader       = $( document.getElementById( 'loading_animation' ) );
+		notifs.$.notifContent = $( document.getElementById( 'fancy_notification_content' ) );
+	};
 
-		/**
-		 * Move Fancy Notification element to end of HTML body.
-		 *
-		 * @since  4.0
-		 */
-		appendToBody : function() {
+	/**
+	 * Kick off our notification handlers.
+	 *
+	 * @since  4.0
+	 */
+	notifs.init = function() {
+		notifs.cache();
+		notifs.bindEvents();
+	};
 
-			$( '#fancy_notification' ).appendTo( 'body' );
+	/**
+	 * Event Handlers
+	 *
+	 * @since  4.0
+	 */
+	notifs.bindEvents = function() {
+		$( document )
+			.on( 'ready', notifs.appendToBody )
+			.on( 'wpscAddToCart', notifs.wpscAddToCart )
+			.on( 'wpscAddedToCart', notifs.wpscAddedToCart );
+	};
 
-		},
+	/**
+	 * Move Fancy Notification element to end of HTML body.
+	 *
+	 * @since  4.0
+	 */
+	notifs.appendToBody = function() {
+		notifs.$.notif.appendTo( 'body' );
+	};
 
-		/**
-		 * Fancy Notification: Show
-		 *
-		 * @since  4.0
-		 */
-		wpscAddToCart : function( e ) {
+	/**
+	 * Fancy Notification: Show
+	 *
+	 * @since  4.0
+	 */
+	notifs.wpscAddToCart = function() {
+		notifs.$.animation.css( 'visibility', 'hidden' );
+		notifs.fancy_notification();
+	};
 
-			$( 'div.wpsc_loading_animation' ).css( 'visibility', 'hidden' );
-			WPEC_Fancy_Notifications.fancy_notification();
+	/**
+	 * Fancy Notification: Hide
+	 *
+	 * @since  4.0
+	 */
+	notifs.wpscAddedToCart = function( evt ) {
 
-		},
-
-		/**
-		 * Fancy Notification: Hide
-		 *
-		 * @since  4.0
-		 */
-		wpscAddedToCart : function( e ) {
-
-			if ( ( e.response ) ) {
-				if ( e.response.hasOwnProperty( 'fancy_notification' ) && e.response.fancy_notification ) {
-					if ( $( '#fancy_notification_content' ) ) {
-						$( '#fancy_notification_content' ).html( e.response.fancy_notification );
-						$( '#loading_animation').css( 'display', 'none' );
-						$( '#fancy_notification_content' ).css( 'display', 'block' );
-					}
-				}
-				$( document ).trigger( { type : 'wpsc_fancy_notification', response : e.response } );
+		if ( evt.response ) {
+			if ( evt.response.fancy_notification && notifs.$.notifContent.length ) {
+				notifs.$.loader.hid();
+				notifs.$.notifContent.html( evt.response.fancy_notification ).show();
 			}
+			$( document ).trigger( { type : 'wpsc_fancy_notification', response : evt.response } );
+		}
 
-			if ( $( '#fancy_notification' ).length > 0 ) {
-				$( '#loading_animation' ).css( 'display', 'none' );
-			}
-
-		},
-
-		/**
-		 * Fancy Notification
-		 *
-		 * @since  4.0
-		 */
-		fancy_notification : function() {
-
-			var fancyNotificationEl = $( '#fancy_notification' );
-
-			if ( typeof WPSC_SHOW_FANCY_NOTIFICATION === 'undefined' ) {
-				WPSC_SHOW_FANCY_NOTIFICATION = true;
-			}
-
-			if ( ( WPSC_SHOW_FANCY_NOTIFICATION === true ) && ( fancyNotificationEl !== null ) ) {
-				fancyNotificationEl.css( {
-					display  : 'block',
-					position : 'fixed',
-					left     : ( $( window ).width() - fancyNotificationEl.outerWidth() ) / 2,
-					top      : ( $( window ).height() - fancyNotificationEl.outerHeight() ) / 2
-				} );
-				$( '#loading_animation' ).css( 'display', 'block' );
-				$( '#fancy_notification_content' ).css( 'display', 'none' );
-			}
-
+		if ( notifs.$.notif.length > 0 ) {
+			notifs.$.loader.hid();
 		}
 
 	};
 
 	/**
-	 * Event Handlers
+	 * Fancy Notification
+	 *
+	 * @since  4.0
 	 */
-	$( document ).on( 'ready', WPEC_Fancy_Notifications.appendToBody );
-	$( document ).on( 'wpscAddToCart', WPEC_Fancy_Notifications.wpscAddToCart );
-	$( document ).on( 'wpscAddedToCart', WPEC_Fancy_Notifications.wpscAddedToCart );
+	notifs.fancy_notification = function() {
 
-} ) ( jQuery );
+		if ( 'undefined' === typeof window.WPSC_SHOW_FANCY_NOTIFICATION ) {
+			window.WPSC_SHOW_FANCY_NOTIFICATION = true;
+		}
+
+		if ( true === window.WPSC_SHOW_FANCY_NOTIFICATION && null !== notifs.$.notif ) {
+			notifs.$.notif.css( {
+				display  : 'block',
+				position : 'fixed',
+				left     : ( $( window ).width() - notifs.$.notif.outerWidth() ) / 2,
+				top      : ( $( window ).height() - notifs.$.notif.outerHeight() ) / 2
+			} );
+			notifs.$.loader.show();
+			notifs.$.notifContent.hid();
+		}
+
+	};
+
+	$( notifs.init );
+
+} )( window, document, jQuery, window.WPEC_Fancy_Notifications );
