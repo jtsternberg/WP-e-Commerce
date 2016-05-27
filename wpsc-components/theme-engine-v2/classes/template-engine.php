@@ -163,12 +163,31 @@ class WPSC_Template_Engine {
 	}
 
 	/**
+	 * Register default scripts' localization data.
+	 *
+	 * @since 4.0
+	 */
+	private function register_default_script_localization() {
+		$this->core_scripts['wpsc-copy-billing-info']['data'] = array(
+			'property_name' => 'copyBilling',
+			'data' => array(
+				'strings' => array(
+					'billing_and_shipping' => apply_filters( 'wpsc_checkout_billing_header_label' , __( '<h2>Billing &amp; Shipping Details</h2>', 'wp-e-commerce' ) ),
+					'shipping'             => apply_filters( 'wpsc_checkout_shipping_header_label' , __( '<h2>Shipping Details</h2>', 'wp-e-commerce' ) ),
+					'billing'              => apply_filters( 'wpsc_checkout_billing_only_header_label', __( '<h2>Billing Details</h2>', 'wp-e-commerce' ) ),
+				),
+			),
+		);
+	}
+
+	/**
 	 * Get all the registered core scripts data.
 	 *
 	 * @since  4.0
 	 * @return array
 	 */
 	public function get_core_scripts_data() {
+		$this->register_default_script_localization();
 		return $this->core_scripts;
 	}
 

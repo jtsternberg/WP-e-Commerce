@@ -158,7 +158,9 @@ class WPSC_Controller_Customer_Account extends WPSC_Controller {
 
 	public function settings() {
 		$this->view = 'customer-account-settings';
-		_wpsc_enqueue_shipping_billing_scripts();
+
+		wpsc_enqueue_script( 'wpsc-country-region' );
+		wpsc_enqueue_script( 'wpsc-copy-billing-info' );
 
 		if ( isset( $_POST['action'] ) && $_POST['action'] == 'submit_customer_settings_form' ) {
 			$this->submit_customer_settings();
