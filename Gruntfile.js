@@ -52,7 +52,7 @@ module.exports = function( grunt ) {
 				files: [{
 					expand: true,
 					cwd: 'wpsc-components/theme-engine-v2/theming/assets/css',
-					src: ['**/*.css'],
+					src: ['*.css', '!*.min.css', '!wpsc-components/theme-engine-v2/theming/assets/css/font-awesome-ie7.css'],
 					dest: 'wpsc-components/theme-engine-v2/theming/assets/css/',
 				}]
 			}
@@ -63,7 +63,7 @@ module.exports = function( grunt ) {
 				files: [{
 					expand: true,
 					cwd: 'wpsc-components/theme-engine-v2/theming/assets/css',
-					src: ['*.css', '!*.min.css'],
+					src: ['*.css', '!*.min.css', '!wpsc-components/theme-engine-v2/theming/assets/css/font-awesome-ie7.css'],
 					dest: 'wpsc-components/theme-engine-v2/theming/assets/css',
 					ext: '.min.css'
 				}]
