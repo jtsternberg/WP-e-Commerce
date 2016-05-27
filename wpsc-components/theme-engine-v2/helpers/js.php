@@ -16,6 +16,16 @@ function _wpsc_te2_register_scripts() {
 			$script_data['version'],
 			! isset( $script_data['in_footer'] ) || $script_data['in_footer']
 		);
+
+		if ( isset( $script_data['data'] ) ) {
+
+			wpsc_localize_script(
+				$handle,
+				$script_data['data']['property_name'],
+				$script_data['data']['data']
+			);
+
+		}
 	}
 
 	$enqueued = false;
@@ -33,27 +43,6 @@ function _wpsc_te2_register_scripts() {
 
 	do_action( 'wpsc_register_scripts' );
 	do_action( 'wpsc_enqueue_scripts' );
-}
-
-function _wpsc_enqueue_shipping_billing_scripts() {
-	add_action(
-		'wp_enqueue_scripts',
-		'_wpsc_action_enqueue_shipping_billing_scripts'
-	);
-}
-
-function _wpsc_action_enqueue_shipping_billing_scripts() {
-	wpsc_enqueue_script( 'wpsc-country-region' );
-	wpsc_enqueue_script( 'wpsc-copy-billing-info', array(
-		'property_name' => 'copyBilling',
-		'data' => array(
-			'strings' => array(
-				'billing_and_shipping' => apply_filters( 'wpsc_checkout_billing_header_label' , __( '<h2>Billing &amp; Shipping Details</h2>', 'wp-e-commerce' ) ),
-				'shipping'             => apply_filters( 'wpsc_checkout_shipping_header_label' , __( '<h2>Shipping Details</h2>', 'wp-e-commerce' ) ),
-				'billing'              => apply_filters( 'wpsc_checkout_billing_only_header_label', __( '<h2>Billing Details</h2>', 'wp-e-commerce' ) ),
-			),
-		),
-	) );
 }
 
 /**
