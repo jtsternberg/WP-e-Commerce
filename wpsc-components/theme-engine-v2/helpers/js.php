@@ -36,13 +36,6 @@ function _wpsc_te2_register_scripts() {
 }
 
 function _wpsc_enqueue_shipping_billing_scripts() {
-	add_action(
-		'wp_enqueue_scripts',
-		'_wpsc_action_enqueue_shipping_billing_scripts'
-	);
-}
-
-function _wpsc_action_enqueue_shipping_billing_scripts() {
 	wpsc_enqueue_script( 'wpsc-country-region' );
 	wpsc_enqueue_script( 'wpsc-copy-billing-info', array(
 		'property_name' => 'copyBilling',
