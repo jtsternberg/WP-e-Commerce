@@ -9,6 +9,7 @@ function _wpsc_te2_register_scripts() {
 	$scripts = apply_filters( 'wpsc_registered_scripts', $engine->get_core_scripts_data() );
 
 	foreach ( $scripts as $handle => $script_data ) {
+
 		wp_register_script(
 			$handle,
 			wpsc_locate_asset_uri( $script_data['path'] ),
@@ -43,6 +44,84 @@ function _wpsc_te2_register_scripts() {
 
 	do_action( 'wpsc_register_scripts' );
 	do_action( 'wpsc_enqueue_scripts' );
+}
+
+function _wpsc_cart_notifications_modal_underscores_template() {
+	?>
+	<script type="text/html" id="tmpl-wpsc-modal">
+		<div id="tmpl-wpsc-modal-overlay"></div>
+		<div id="wpsc-cart-notification"></div>
+	</script>
+	<script type="text/html" id="tmpl-wpsc-modal-inner">
+		<div id="wpsc-cart-notification-inner">
+			<div id="wpsc-what-was-added">
+				<span id="wpsc-confirmation-message">
+					<span class="wpsc-confirmation-count">1</span> item added to </span> <a class="wpsc-cart-link" href="{cart_url}">Your Cart</a>
+				</span>
+				<div id="wpsc-products-review">
+					<div class="wpsc-product-review" id="{product_id}">
+						<div class="wpsc-product-review-thumb">
+							<img src="http://dev.wpecommerce/wp-content/uploads/2016/05/Eddy-Need-Remix-mp3-image.jpg" alt="Eddy Remix">
+						</div>
+						<div class="proInfo pR10 fR">
+							<span class="wpsc-product-review-name">Eddy Remix</span>
+							<span class="wpsc-product-review-sku">SKU 312107</span>
+							<span class="wpsc-product-review-price">
+								<span class="wpsc-product-review-reg-price">$39.95</span>
+							</span>
+							<span class="wpsc-product-review-quantity">Quantity: 1</span>
+						</div>
+					</div>
+					<!-- end repeater -->
+				</div>
+			</div>
+
+			<div id="wpsc-confirmation-totals">
+				<div id="wpsc-cart-status">
+					Your Cart: <span class="wpsc-cart-count">2</span> items
+				</div>
+
+				<div id="wpsc-totals-table">
+
+					<div class="wpsc-totals-table-row wpsc-totals-subtotal">
+						<div class="wpsc-totals-row-label">
+							Order Subtotal:
+						</div>
+						<div class="wpsc-totals-row-total">
+							$79.90
+						</div>
+					</div>
+
+					<div class="wpsc-totals-table-row wpsc-totals-shipping">
+
+						<div class="wpsc-totals-row-label">
+							Est. Shipping + Handling:
+						</div>
+						<div class="wpsc-totals-row-total">
+							$13.95
+						</div>
+					</div>
+
+					<div class="wpsc-totals-table-row wpsc-totals-subtotal">
+						<div class="wpsc-totals-row-label">
+							Subtotal:
+						</div>
+						<div class="wpsc-totals-row-total">
+							$93.85
+						</div>
+					</div>
+
+				</div>
+
+				<button class="wpsc-button wpsc-close-modal">Continue Shopping</button>
+
+				<button class="wpsc-button wpsc-button-primary wpsc-begin-checkout"><i class="wpsc-icon-white wpsc-icon-ok-sign"></i> Checkout Now</button>
+
+			</div>
+
+		</div>
+	</script>
+	<?php
 }
 
 /**
@@ -132,6 +211,21 @@ function wpsc_localize_script( $handle, $property_name, $data, $add_to_namespace
 
 		// Make sure this variable does not break the WPSC namespace.
 		$property_name = 'WPSC.' . sanitize_html_class( maybe_serialize( $property_name ) );
+	}
+
+	if ( isset( $data['_templates'] ) && is_array( $data['_templates'] ) ) {
+
+		foreach ( $data['_templates'] as $tmpl_id => $callback ) {
+			if ( is_callable( $callback ) ) {
+
+				// Reset callback value as we won't that need that in JS.
+				$data['_templates'][ $tmpl_id ] = $tmpl_id;
+
+				// Hook in template callback.
+				add_action( 'wp_footer', $callback );
+			}
+		}
+
 	}
 
 	$result = wp_localize_script( $handle, $property_name, $data );

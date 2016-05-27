@@ -106,12 +106,7 @@ function wpsc_get_add_to_cart_form( $id = null ) {
 	}
 
 	// Enqueue Cart Notifications script.
-	wpsc_enqueue_script( 'wpsc-cart-notifications', array(
-		'property_name' => 'cartNotifications',
-		'data' => array(
-			'strings' => array(),
-		),
-	) );
+	wpsc_enqueue_script( 'wpsc-cart-notifications' );
 
 	$args = wpsc_get_add_to_cart_form_args( $id );
 

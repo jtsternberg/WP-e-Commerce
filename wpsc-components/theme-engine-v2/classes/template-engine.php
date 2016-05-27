@@ -93,7 +93,7 @@ class WPSC_Template_Engine {
 		),
 		'wpsc-cart-notifications' => array(
 			'path'         => 'js/cart-notifications.js',
-			'dependencies' => array( 'jquery' ),
+			'dependencies' => array( 'jquery', 'wp-backbone' ),
 			'version'      => WPSC_VERSION,
 		),
 	);
@@ -178,6 +178,22 @@ class WPSC_Template_Engine {
 				),
 			),
 		);
+
+		$this->core_scripts['wpsc-cart-notifications']['data'] = array(
+			'property_name' => 'cartNotifications',
+			'data' => array(
+				'strings' => apply_filters( 'wpsc_cart_notification_strings', array(
+					'1_added'  => __( '%d item added to Your Cart.', 'wp-e-commerce' ),
+					// 'x_added'  => __( '%d items added to Your Cart.', 'wp-e-commerce' ),
+					// 'your_cart_1' => __( 'Your Cart: %d items', 'wp-e-commerce' ),
+					// 'billing'  => __( '<h2>Billing Details</h2>', 'wp-e-commerce' ),
+				) ),
+				'_templates' => array(
+					'wpsc-modal-inner' => '_wpsc_cart_notifications_modal_underscores_template',
+				),
+			),
+		);
+
 	}
 
 	/**
