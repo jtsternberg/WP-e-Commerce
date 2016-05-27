@@ -7,6 +7,18 @@ module.exports = function( grunt ) {
 
 	grunt.initConfig({
 
+		lessToSass: {
+			convert: {
+				files: [{
+					expand: true,
+					cwd: 'wpsc-components/theme-engine-v2/theming/assets/less',
+					src: ['*.less'],
+					ext: '.scss',
+					dest: 'wpsc-components/theme-engine-v2/theming/assets/scss/partials'
+				}]
+			}
+		},
+
 		jshint: {
 			options: {
 				jshintrc: '.jshintrc'
@@ -145,6 +157,14 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask('css', ['sass', 'cmq', 'cssmin']);
 	grunt.registerTask('default', ['jshint', 'css', 'makepot']);
+
+	// To do less->sass conversion:
+	// `npm install grunt-less-to-sass`
+	//
+	// then uncomment this line:
+	grunt.loadNpmTasks('grunt-less-to-sass');
+	//
+	// Then run `grunt lessToSass`
 
 	/**
 	 * PHP Code Sniffer using WordPress Coding Standards.

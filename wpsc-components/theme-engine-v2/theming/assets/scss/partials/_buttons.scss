@@ -1,0 +1,104 @@
+@mixin button(){
+	@extend .border-radius;
+	@include box-shadow(unquote("inset 0 1px 0 rgba(255, 255, 255, 0.3)"));
+	@include transition(box-shadow linear 0.1s);
+
+	border: 1px solid $border-color-normal;
+	background-color: $color-normal;
+	@include gradient($gradient-normal-1, $gradient-normal-2, $gradient-normal-fallback);
+	color: $font-color;
+	cursor: pointer;
+	display: inline-block;
+	font-weight: normal;
+	font-size: $font-size-m;
+	line-height: $line-height-m;
+	margin: 0;
+	outline: none;
+	padding:5px 13px;
+	text-decoration: none;
+	text-shadow: rgba(255, 255, 255, 0.6) 0 1px 0;
+
+	&:hover,
+	&:active,
+	&:focus,
+	&:visited {
+		text-decoration: none;
+		color: $font-color;
+	}
+	&:hover {
+		@include box-shadow(unquote("inset 0 1px 0 rgba(255, 255, 255, 0.15)"));
+		@include gradient($gradient-normal-1-hover, $gradient-normal-2-hover, $gradient-normal-hover-fallback);
+	}
+	&:active {
+		@include box-shadow(unquote("inset 0 1px 5px rgba(0, 0, 0, 0.20)"));
+		@include gradient($gradient-normal-1-active, $gradient-normal-2-active, $gradient-normal-active-fallback);
+	}
+	&:focus {
+		$box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 5px 1px $border-color-focus !default;
+		@include box-shadow($box-shadow);
+	}
+	&.wpsc-button-success {
+		@include wpsc-button-type(success);
+	}
+	&.wpsc-button-warning {
+		@include wpsc-button-type(warning);
+	}
+	&.wpsc-button-important {
+		@include wpsc-button-type(important);
+	}
+	&.wpsc-button-info {
+		@include wpsc-button-type(info);
+	}
+	&.wpsc-button-inverse {
+		@include wpsc-button-type(inverse);
+	}
+	&.wpsc-button-primary {
+		@include wpsc-button-type(primary);
+	}
+	&.wpsc-button-small {
+		font-size: $font-size-s;
+		padding: 3px 7px;
+	}
+	&.wpsc-button-mini {
+		font-size: $font-size-s;
+		line-height: $line-height-s;
+		padding: 0px 5px;
+
+		@include border-radius(2px);
+	}
+}
+@mixin wpsc-button-type($type){
+	$border-color-var: "border-color-#{$type}" !default;
+	$gradient-color-1-var: "gradient-#{$type}-1" !default;
+	$gradient-color-2-var: "gradient-#{$type}-2" !default;
+	$gradient-color-1-hover-var: "gradient-#{$type}-1-hover" !default;
+	$gradient-color-2-hover-var: "gradient-#{$type}-2-hover" !default;
+	$gradient-color-1-active-var: "gradient-#{$type}-1-active" !default;
+	$gradient-color-2-active-var: "gradient-#{$type}-2-active" !default;
+	$gradient-color-fallback-var: "gradient-#{$type}-fallback" !default;
+	$gradient-color-hover-fallback-var: "gradient-#{$type}-hover-fallback" !default;
+	$gradient-color-active-fallback-var: "gradient-#{$type}-active-fallback" !default;
+
+	border-color: $$border-color-var;
+	color: $font-color-inverse;
+	text-shadow: rgba(0, 0, 0, 0.19) 0 -1px 0;
+	@include gradient($$gradient-color-1-var, $$gradient-color-2-var, $$gradient-color-fallback-var);
+
+	&:hover,
+	&:active,
+	&:focus,
+	&:visited {
+		color: $font-color-inverse;
+	}
+	&:hover {
+		@include gradient($$gradient-color-1-hover-var, $$gradient-color-2-hover-var, $$gradient-color-hover-fallback-var);
+	}
+	&:active {
+		@include gradient($$gradient-color-1-active-var, $$gradient-color-2-active-var, $$gradient-color-active-fallback-var);
+	}
+}
+.wpsc-controller {
+	.wpsc-button {
+		@include button();
+	}
+}
