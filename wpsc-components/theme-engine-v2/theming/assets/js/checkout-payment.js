@@ -1,15 +1,18 @@
-;(function($) {
-	"use strict";
+(function($) {
+	'use strict';
 	var toggle_extra_form = function() {
 		var value = this.value;
 		var form = $('.wpsc-payment-gateway-extra-form-' + value);
-		if (form.size() === 0)
+		if ( 0 === form.size() ) {
 			return;
+		}
 
-		if (this.checked)
+		if (this.checked) {
 			form[0].style.display = '';
-		else
+		}
+		else {
 			form[0].style.display = 'none';
+		}
 	};
 	$(function() {
 		var inputs = $('input[name="wpsc_payment_method"]');

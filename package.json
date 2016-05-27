@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-asciify": "~0.2.2",
     "grunt-checktextdomain": "^1.0.0",
     "grunt-combine-media-queries": "^1.0.20",
     "grunt-contrib-cssmin": "^0.9.0",

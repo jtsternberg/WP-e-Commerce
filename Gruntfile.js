@@ -1,4 +1,4 @@
-/*global exports:false, module:false, require:false */
+/*global module:false, require:false */
 
 module.exports = function( grunt ) {
 	'use strict';
@@ -7,25 +7,72 @@ module.exports = function( grunt ) {
 
 	grunt.initConfig({
 
+		asciify: {
+			banner: {
+				text    : 'WP eCommerce',
+				options : {
+					font : 'speed',
+					log  : true
+				}
+			}
+		},
+
 		jshint: {
 			options: {
 				jshintrc: '.jshintrc'
 			},
-			plugin: [
-				'Gruntfile.js',
-				'wpsc-admin/js/*.js',
-				'wpsc-components/marketplace-core-v1/static/*.js',
-				'wpsc-components/merchant-core-v3/gateways/*.js',
-				'wpsc-components/theme-engine-v2/admin/js/*.js',
-				'wpsc-components/theme-engine-v2/theming/assets/js/*.js',
-				'wpsc-components/merchant-core-v3/*.js',
-				'wpsc-core/js/*.js',
-				'!wpsc-core/js/tinymce/*.js',
-				'!wpsc-core/js/*-min.js',
-				'!wpsc-core/js/jquery*.js',
-				'!wpsc-admin/js/admin-legacy.js',
-				'!wpsc-admin/js/jquery-*.js'
-			]
+
+			all: {
+				src: [
+					'Gruntfile.js',
+					'wpsc-admin/js/*.js',
+					'wpsc-components/marketplace-core-v1/static/*.js',
+					'wpsc-components/merchant-core-v3/gateways/*.js',
+					'wpsc-components/theme-engine-v2/admin/js/*.js',
+					'wpsc-components/theme-engine-v2/theming/assets/js/*.js',
+					'wpsc-components/merchant-core-v3/*.js',
+					'wpsc-core/js/*.js',
+					'!wpsc-core/js/tinymce/*.js',
+					'!wpsc-core/js/*-min.js',
+					'!wpsc-core/js/jquery*.js',
+					'!wpsc-admin/js/admin-legacy.js',
+					'!wpsc-admin/js/jquery-*.js',
+					'!wpsc-components/theme-engine-v2/admin/js/select2*.js',
+					'!wpsc-components/theme-engine-v2/theming/assets/js/jquery.select-to-autocomplete.js',
+					'!*.min.js'
+				]
+			},
+			watch: {
+				src : [
+					'Gruntfile.js',
+					'wpsc-components/theme-engine-v2/theming/assets/js/*.js',
+					'!wpsc-components/theme-engine-v2/theming/assets/js/jquery.select-to-autocomplete.js',
+					'!**/*.min.js'
+				]
+			}
+		},
+
+		uglify: {
+			all: {
+				options: {
+					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+					// 	' * <%= pkg.homepage %>\n' +
+					// 	' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
+					// 	' * Licensed GPLv2+' +
+					// 	' */\n',
+					mangle: false
+				},
+				files: [{
+					expand: true,
+					cwd: 'wpsc-components/theme-engine-v2/theming/assets/js',
+					src: ['*.js', '!*.min.js'],
+					dest: 'wpsc-components/theme-engine-v2/theming/assets/js',
+					ext: '.min.js'
+				}]
+			},
+			watch : {
+
+			}
 		},
 
 		sass: {
@@ -53,7 +100,7 @@ module.exports = function( grunt ) {
 					expand: true,
 					cwd: 'wpsc-components/theme-engine-v2/theming/assets/css',
 					src: ['*.css', '!*.min.css', '!wpsc-components/theme-engine-v2/theming/assets/css/font-awesome-ie7.css'],
-					dest: 'wpsc-components/theme-engine-v2/theming/assets/css/',
+					dest: 'wpsc-components/theme-engine-v2/theming/assets/css/'
 				}]
 			}
 		},
@@ -120,31 +167,40 @@ module.exports = function( grunt ) {
 					},
 					type: 'wp-plugin',    // Type of project (wp-plugin or wp-theme).
 					updateTimestamp: true,    // Whether the POT-Creation-Date should be updated without other changes.
-					processPot: function( pot, options ) {
+					processPot: function( pot ) {
 						pot.headers['report-msgid-bugs-to'] = 'https://wpecommerce.org/';
 						pot.headers['last-translator'] = 'WP-Translations (http://wp-translations.org/)';
 						pot.headers['language-team'] = 'WP-Translations <wpt@wp-translations.org>';
-						pot.headers['language'] = 'en_US';
+						pot.headers.language = 'en_US';
 						return pot;
 					}
 				}
 			}
 		},
+
 		watch: {
 			css: {
-				files: ['<%= sass.dist.files %>'],
-				tasks: ['css']
+				files: ['wpsc-components/theme-engine-v2/theming/assets/scss**/*.scss'],
+				tasks: ['css'],
+				options: {
+					spawn: false
+				}
 			},
 			js: {
-				files: ['<%= jshint.plugin %>'],
-				tasks: ['jshint']
+				files: ['<%= jshint.watch.src %>'],
+				tasks: ['watchjs'],
+				options: {
+					debounceDelay: 500
+				}
 			}
 		}
 
 	});
 
-	grunt.registerTask('css', ['sass', 'cmq', 'cssmin']);
-	grunt.registerTask('default', ['jshint', 'css', 'makepot']);
+	grunt.registerTask('css', ['asciify', 'sass', 'cmq', 'cssmin']);
+	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
+	grunt.registerTask('watchjs', ['asciify', 'jshint:watch', 'uglify:watch']);
+	grunt.registerTask('default', ['asciify', 'js', 'css', 'makepot']);
 
 	/**
 	 * PHP Code Sniffer using WordPress Coding Standards.

@@ -1,4 +1,3 @@
-/*global WPSC_Price_Table */
 ;(function($){
 	var l10n = window.WPSC.priceTable;
 
