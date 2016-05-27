@@ -8,6 +8,7 @@ function _wpsc_te2_enqueue_styles() {
 
 	wp_register_style( 'wpsc-common', wpsc_locate_asset_uri( "css/common{$suffix}.css" ), array(), WPSC_VERSION );
 	wp_register_style( 'wpsc-responsive', wpsc_locate_asset_uri( "css/wpsc-responsive{$suffix}.css" ), array(), WPSC_VERSION );
+	wp_register_style( 'wpsc-cart-notifications', wpsc_locate_asset_uri( "css/cart-notifications{$suffix}.css" ), array(), WPSC_VERSION );
 
 	do_action( 'wpsc_register_styles' );
 

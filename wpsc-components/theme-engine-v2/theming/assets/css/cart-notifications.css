@@ -1,5 +1,75 @@
+/*******************
+Variables 
+*******************/
+
+/* Typography */
+
+/* Shopping Cart Single Product Cells (Needs to add up to 100%) */
+
+/* value x 4 i.e. 2.5 x 4 = 10% */
+
+/*Product Grid*/
+
 .wpsc-hide {
 	display: none;
+}
+
+#wpsc-cart-notification {
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	margin-left: -364px;
+	width: 728px;
+	height: 250px;
+	z-index: 160000;
+	border: 1px solid #ccc;
+	background: #fff;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 20px;
+}
+
+.wpsc-product-review-thumb {
+	width: 50%;
+}
+
+.wpsc-product-review-thumb img {
+	float: left;
+	max-height: 100%;
+	max-width: 90%;
+	width: auto;
+	height: auto;
+	margin-right: 10%;
+}
+
+.wpsc-product-review-details {
+	width: 50%;
+	float: right;
+}
+
+#wpsc-what-was-added {
+	width: 50%;
+	float: left;
+	padding: 0 20px 0 0;
+}
+
+#wpsc-confirmation-totals {
+	width: 50%;
+	float: right;
+	padding: 0 0 0;
+}
+
+#wpsc-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	min-height: 360px;
+	background: #000;
+	opacity: 0.5;
+	z-index: 159900;
 }
 
 /*# sourceMappingURL=cart-notifications.css.map */

@@ -10,7 +10,10 @@
 
 	notifs.cache = function() {
 		c$.body = $( document.body );
+		c$.body.append( $id( 'tmpl-wpsc-modal' ).html() );
 		c$.addBtn = $( '.wpsc-add-to-cart' );
+		c$.modal = $id( 'wpsc-cart-notification' );
+		c$.overlay = $id( 'wpsc-modal-overlay' );
 	};
 
 	notifs.init = function() {
@@ -18,8 +21,8 @@
 		notifs.createCartNotificationElements();
 		notifs.bindEvents();
 
-		c$.body.append( $id( 'tmpl-wpsc-modal' ).html() );
-		notifs.modal = wp.template( notifs._templates['wpsc-modal'] );
+		notifs.modal = wp.template( 'wpsc-modal-inner' );
+		// wp.template( 'highlight' )
 		window.console.log( 'notifs', notifs );
 	};
 
@@ -28,11 +31,27 @@
 	};
 
 	notifs.bindEvents = function() {
+		c$.body
+			.on( 'click', '.wpsc-add-to-cart', notifs.triggerModal )
+			.on( 'click', '#wpsc-modal-overlay', notifs.closeModal );
+	};
 
+	notifs.triggerModal = function( evt ) {
+		evt.preventDefault();
+		notifs.openModal();
+	};
+
+	notifs.closeModal = function() {
+		c$.overlay.addClass( 'wpsc-hide' );
+		c$.modal.addClass( 'wpsc-hide' );
 	};
 
 	notifs.openModal = function( data ) {
-		notifs.modal( data );
+		data = data || {
+			one : 'one'
+		};
+		c$.overlay.removeClass( 'wpsc-hide' );
+		c$.modal.html( notifs.modal( data ) ).removeClass( 'wpsc-hide' );
 	};
 
 

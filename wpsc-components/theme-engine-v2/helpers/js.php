@@ -47,10 +47,12 @@ function _wpsc_te2_register_scripts() {
 }
 
 function _wpsc_cart_notifications_modal_underscores_template() {
+	wp_enqueue_style( 'wpsc-cart-notifications' );
+
 	?>
 	<script type="text/html" id="tmpl-wpsc-modal">
-		<div id="tmpl-wpsc-modal-overlay"></div>
-		<div id="wpsc-cart-notification"></div>
+		<div class="wpsc-hide" id="wpsc-modal-overlay"></div>
+		<div class="wpsc-hide" id="wpsc-cart-notification"></div>
 	</script>
 	<script type="text/html" id="tmpl-wpsc-modal-inner">
 		<div id="wpsc-cart-notification-inner">
@@ -63,7 +65,7 @@ function _wpsc_cart_notifications_modal_underscores_template() {
 						<div class="wpsc-product-review-thumb">
 							<img src="http://dev.wpecommerce/wp-content/uploads/2016/05/Eddy-Need-Remix-mp3-image.jpg" alt="Eddy Remix">
 						</div>
-						<div class="proInfo pR10 fR">
+						<div class="wpsc-product-review-details">
 							<span class="wpsc-product-review-name">Eddy Remix</span>
 							<span class="wpsc-product-review-sku">SKU 312107</span>
 							<span class="wpsc-product-review-price">
