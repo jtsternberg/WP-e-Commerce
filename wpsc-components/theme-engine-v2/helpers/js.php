@@ -44,84 +44,108 @@ function _wpsc_te2_register_scripts() {
 	do_action( 'wpsc_enqueue_scripts' );
 }
 
+function _wpsc_prepare_cart_item_for_js( $item, $key ) {
+
+	/*
+	 * @todo Most of the following is copied from WPSC_Cart_Item_Table::column_items(),
+	 * but this should really be moved to a universally available functions/methods.
+	 */
+
+	$product      = get_post( $item->product_id );
+	$product_name = $item->product_name;
+
+	if ( $product->post_parent ) {
+		$permalink    = wpsc_get_product_permalink( $product->post_parent );
+		$product_name = get_post_field( 'post_title', $product->post_parent );
+	} else {
+		$permalink = wpsc_get_product_permalink( $item->product_id );
+	}
+
+	$variations = array();
+
+	if ( is_array( $item->variation_values ) ) {
+		foreach ( $item->variation_values as $variation_set => $variation ) {
+			$set_name       = get_term_field( 'name', $variation_set, 'wpsc-variation' );
+			$variation_name = get_term_field( 'name', $variation    , 'wpsc-variation' );
+
+			if ( ! is_wp_error( $set_name ) && ! is_wp_error( $variation_name ) ) {
+				$variations[]   = array(
+					'label' => esc_html( $set_name ),
+					'value' => esc_html( $variation_name ),
+				);
+			}
+		}
+	}
+
+	$image = wpsc_has_product_thumbnail( $item->product_id )
+		? wpsc_get_product_thumbnail( $item->product_id, 'archive' )
+		: wpsc_product_no_thumbnail_image( 'archive', '', false );
+
+	$remove_url = add_query_arg( '_wp_nonce', wp_create_nonce( "wpsc-remove-cart-item-{$key}" ), wpsc_get_cart_url( 'remove/' . absint( $key ) ) );
+
+	$prepared = array(
+		'id'         => $item->product_id,
+		'url'        => $permalink,
+		'price'      => wpsc_format_currency( $item->unit_price ), // @todo correct property?
+		'title'      => $product_name,
+		'thumb'      => $image,
+		'quantity'   => $item->quantity,
+		'remove_url' => $remove_url,
+		'variations' => $variations
+	);
+
+	return apply_filters( 'wpsc_prepared_cart_item_for_js', $prepared );
+}
+
+function _wpsc_prepare_cart_items_for_js( $cart_items = array() ) {
+	$prepared = array();
+	foreach ( $cart_items as $key => $item ) {
+		$prepared[] = _wpsc_prepare_cart_item_for_js( $item, $key );
+	}
+
+	return $prepared;
+}
+
 function _wpsc_cart_notifications_modal_underscores_template() {
 	wp_enqueue_style( 'wpsc-cart-notifications' );
 
+	if ( ! isset( $GLOBALS['wpsc_cart'] ) ) {
+		$GLOBALS['wpsc_cart'] = new wpsc_cart();
+	}
+
+	$cart_items = _wpsc_prepare_cart_items_for_js( $GLOBALS['wpsc_cart']->cart_items );
+
+	global $wpsc_cart;
+
+	$subtotal = $wpsc_cart->calculate_subtotal();
+	$shipping_total = '0';
+	$total = $subtotal + $shipping_total;
+
+	$cart_status = array(
+		'subTotal'      => $shipping_total ? wpsc_format_currency( $subtotal ) : '',
+		'shippingTotal' => $shipping_total ? wpsc_format_currency( $shipping_total ) : '',
+		'total'         => wpsc_format_currency( $total ),
+	);
+
+	wpsc_localize_script( 'wpsc-cart-notifications', 'cartNotifications', array(
+		'_cartItems'  => $cart_items,
+		'_cartStatus' => $cart_status,
+		'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+		'debug'       => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
+		// 'strings' => apply_filters( 'wpsc_cart_notification_strings', array(
+		// 	'1_added'  => __( '%d item added to Your Cart.', 'wp-e-commerce' ),
+		// ) ),
+	) );
 	?>
 	<script type="text/html" id="tmpl-wpsc-modal">
 		<div class="wpsc-hide" id="wpsc-modal-overlay"></div>
 		<div class="wpsc-hide" id="wpsc-cart-notification"></div>
 	</script>
 	<script type="text/html" id="tmpl-wpsc-modal-inner">
-		<div class="wpsc-cart-notification-inner">
-			<div class="wpsc-close-modal wpsc-icon-remove">Close</div>
-			<div class="wpsc-cart-what-was-added">
-				<div class="wpsc-confirmation-message">
-					<i class="wpsc-icon-check"></i><span class="wpsc-confirmation-count">1</span> item added to <a class="wpsc-cart-link" href="{cart_url}">Your Cart</a>
-				</div>
-				<div class="wpsc-products-review">
-					<div class="wpsc-product-review" id="{product_id}">
-						<div class="wpsc-product-review-thumb">
-							<img src="http://dev.wpecommerce/wp-content/uploads/2016/05/Eddy-Need-Remix-mp3-image.jpg" alt="Eddy Remix">
-						</div>
-						<div class="wpsc-product-review-details">
-							<span class="wpsc-product-review-name">Eddy Remix</span>
-							<span class="wpsc-product-review-sku">SKU 312107</span>
-							<span class="wpsc-product-review-price">
-								<span class="wpsc-product-review-reg-price">$39.95</span>
-							</span>
-							<span class="wpsc-product-review-quantity">Quantity: 1</span>
-						</div>
-					</div>
-					<!-- end repeater -->
-				</div>
-			</div>
-
-			<div class="wpsc-confirmation-totals">
-				<div class="wpsc-cart-status">
-					Your Cart: <span class="wpsc-cart-count">2</span> items
-				</div>
-
-				<div class="wpsc-totals-table wpsc-row">
-
-					<div class="wpsc-totals-table-row wpsc-totals-subtotal">
-						<div class="wpsc-totals-row-label">
-							Order Subtotal:
-						</div>
-						<div class="wpsc-totals-row-total">
-							$79.90
-						</div>
-					</div>
-
-					<div class="wpsc-totals-table-row wpsc-totals-shipping">
-
-						<div class="wpsc-totals-row-label">
-							Est. Shipping + Handling:
-						</div>
-						<div class="wpsc-totals-row-total">
-							$13.95
-						</div>
-					</div>
-
-					<div class="wpsc-totals-table-row wpsc-totals-subtotal">
-						<div class="wpsc-totals-row-label">
-							Subtotal:
-						</div>
-						<div class="wpsc-totals-row-total">
-							$93.85
-						</div>
-					</div>
-
-				</div>
-
-				<div class="wpsc-cart-notification-actions wpsc-form-actions">
-					<button class="wpsc-button wpsc-close-modal">Continue Shopping</button>
-					<button class="wpsc-button wpsc-button-primary wpsc-begin-checkout"><i class="wpsc-icon-white wpsc-icon-ok-sign"></i> Checkout Now</button>
-				</div>
-
-			</div>
-
-		</div>
+		<?php wpsc_get_template_part( 'js-template', 'cart-modal' ); ?>
+	</script>
+	<script type="text/html" id="tmpl-wpsc-modal-product">
+		<?php wpsc_get_template_part( 'js-template', 'cart-modal-product' ); ?>
 	</script>
 	<?php
 }
@@ -238,7 +262,7 @@ function wpsc_localize_script( $handle, $property_name, $data, $add_to_namespace
 
 		$script = str_replace(
 			"var {$property_name} = {",
-			"window.{$property_name} = window.{$property_name} || {",
+			"window.{$property_name} = {",
 			$script
 		);
 

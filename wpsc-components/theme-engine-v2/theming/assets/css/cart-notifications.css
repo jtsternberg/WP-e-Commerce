@@ -48,19 +48,55 @@ Variables
 	overflow: hidden;
 }
 
+.wpsc-cart-notification-inner .wpsc-cart-cell.image {
+	width: 50%;
+	float: left;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-cell.image img {
+	max-height: 100%;
+	max-width: 90%;
+	width: auto;
+	height: auto;
+	margin-right: 10%;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-body {
+	display: block;
+	padding: 20px 0;
+	border-top: 1px solid #ccc;
+	padding-bottom: 0;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-item {
+	padding: 0;
+	border: 0;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-item.wpsc-cart-no-thumb .wpsc-cart-cell.items {
+	width: 100%;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-item-row-actions small {
+	display: block;
+}
+
 .wpsc-close-modal {
 	cursor: pointer;
 }
 
 .wpsc-close-modal.wpsc-icon-remove {
 	color: transparent;
-	width: 1em;
-	height: 1em;
+	width: 1.8em;
+	height: 1.8em;
 	display: block;
 	text-align: center;
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 0;
+	right: 0;
+	line-height: 1.8em;
+	font-size: 16px;
+	overflow: hidden;
 }
 
 .wpsc-close-modal.wpsc-icon-remove:before {
@@ -79,61 +115,47 @@ Variables
 	padding-right: 7px;
 }
 
-.wpsc-products-review {
-	display: block;
-	padding: 20px 0;
-	border-top: 1px solid #ccc;
-}
-
 .wpsc-confirmation-totals {
 	width: 60%;
 	float: right;
 	padding: 0 0 0;
 }
 
-.wpsc-product-review-thumb {
-	width: 50%;
-}
-
-.wpsc-product-review-thumb img {
-	float: left;
-	max-height: 100%;
-	max-width: 90%;
-	width: auto;
-	height: auto;
-	margin-right: 10%;
-}
-
-.wpsc-product-review-details {
-	width: 50%;
-	float: right;
-}
-
 .wpsc-cart-status {
 	font-weight: bold;
 }
 
-.wpsc-totals-row-label {
+.wpsc-totals-table {
+	display: block;
+	padding: 20px 0;
+	border-top: 1px solid #ccc;
+}
+
+.wpsc-totals-table .wpsc-totals-row-label {
 	width: 68%;
 	float: left;
 	padding-right: 2%;
 	clear: both;
+	text-align: left;
 }
 
-.wpsc-totals-row-total {
+.wpsc-totals-table .wpsc-totals-row-total {
 	width: 30%;
 	float: left;
 }
 
-.wpsc-cart-notification-actions {
+.wpsc-form-actions {
+	display: block;
+	padding: 20px 0;
+	border-top: 1px solid #ccc;
 	text-align: right;
 }
 
-.wpsc-cart-notification-actions button {
+.wpsc-form-actions button {
 	font-size: .8em;
 }
 
-.wpsc-cart-notification-actions button:first-child {
+.wpsc-form-actions .wpsc-close-modal {
 	float: left;
 }
 
