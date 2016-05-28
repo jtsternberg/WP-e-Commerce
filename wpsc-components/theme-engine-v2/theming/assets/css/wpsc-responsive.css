@@ -1,5 +1,19 @@
 /*******************
-Variables 
+Global Classes
+*******************/
+
+.wpsc-clearfix:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.wpsc-hide {
+	display: none;
+}
+
+/*******************
+Variables
 *******************/
 
 /* Typography */
@@ -8,10 +22,12 @@ Variables
 
 /* value x 4 i.e. 2.5 x 4 = 10% */
 
-/*Product Grid*/
+/* Product Grid */
+
+/* Mixins */
 
 /*******************
-Shopping Cart 
+Shopping Cart
 ********************/
 
 .wpsc-cart-table {

@@ -53,12 +53,13 @@ function _wpsc_cart_notifications_modal_underscores_template() {
 		<div class="wpsc-hide" id="wpsc-cart-notification"></div>
 	</script>
 	<script type="text/html" id="tmpl-wpsc-modal-inner">
-		<div id="wpsc-cart-notification-inner">
-			<div id="wpsc-what-was-added">
-				<span id="wpsc-confirmation-message">
-					<span class="wpsc-confirmation-count">1</span> item added to </span> <a class="wpsc-cart-link" href="{cart_url}">Your Cart</a>
-				</span>
-				<div id="wpsc-products-review">
+		<div class="wpsc-cart-notification-inner">
+			<div class="wpsc-close-modal wpsc-icon-remove">Close</div>
+			<div class="wpsc-cart-what-was-added">
+				<div class="wpsc-confirmation-message">
+					<i class="wpsc-icon-check"></i><span class="wpsc-confirmation-count">1</span> item added to <a class="wpsc-cart-link" href="{cart_url}">Your Cart</a>
+				</div>
+				<div class="wpsc-products-review">
 					<div class="wpsc-product-review" id="{product_id}">
 						<div class="wpsc-product-review-thumb">
 							<img src="http://dev.wpecommerce/wp-content/uploads/2016/05/Eddy-Need-Remix-mp3-image.jpg" alt="Eddy Remix">
@@ -76,12 +77,12 @@ function _wpsc_cart_notifications_modal_underscores_template() {
 				</div>
 			</div>
 
-			<div id="wpsc-confirmation-totals">
-				<div id="wpsc-cart-status">
+			<div class="wpsc-confirmation-totals">
+				<div class="wpsc-cart-status">
 					Your Cart: <span class="wpsc-cart-count">2</span> items
 				</div>
 
-				<div id="wpsc-totals-table">
+				<div class="wpsc-totals-table wpsc-row">
 
 					<div class="wpsc-totals-table-row wpsc-totals-subtotal">
 						<div class="wpsc-totals-row-label">
@@ -113,9 +114,10 @@ function _wpsc_cart_notifications_modal_underscores_template() {
 
 				</div>
 
-				<button class="wpsc-button wpsc-close-modal">Continue Shopping</button>
-
-				<button class="wpsc-button wpsc-button-primary wpsc-begin-checkout"><i class="wpsc-icon-white wpsc-icon-ok-sign"></i> Checkout Now</button>
+				<div class="wpsc-cart-notification-actions wpsc-form-actions">
+					<button class="wpsc-button wpsc-close-modal">Continue Shopping</button>
+					<button class="wpsc-button wpsc-button-primary wpsc-begin-checkout"><i class="wpsc-icon-white wpsc-icon-ok-sign"></i> Checkout Now</button>
+				</div>
 
 			</div>
 

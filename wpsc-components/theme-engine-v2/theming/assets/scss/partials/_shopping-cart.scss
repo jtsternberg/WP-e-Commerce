@@ -1,14 +1,12 @@
 /*******************
-Shopping Cart 
+Shopping Cart
 ********************/
 
 .wpsc-cart-table {
 	width: 100%;
 }
 .wpsc-cart-item {
-    display: block;
-    padding: 20px 0;
-    border-top: $cart_border;
+	@include wpsc-cart-item();
 }
 .wpsc-row {
 	@extend .wpsc-cart-item;

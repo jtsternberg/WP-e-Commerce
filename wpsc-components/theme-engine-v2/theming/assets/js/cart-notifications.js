@@ -24,6 +24,7 @@
 		notifs.modal = wp.template( 'wpsc-modal-inner' );
 		// wp.template( 'highlight' )
 		window.console.log( 'notifs', notifs );
+		notifs.openModal();
 	};
 
 	notifs.createCartNotificationElements = function() {
@@ -33,7 +34,7 @@
 	notifs.bindEvents = function() {
 		c$.body
 			.on( 'click', '.wpsc-add-to-cart', notifs.triggerModal )
-			.on( 'click', '#wpsc-modal-overlay', notifs.closeModal );
+			.on( 'click', '#wpsc-modal-overlay, .wpsc-close-modal', notifs.closeModal );
 	};
 
 	notifs.triggerModal = function( evt ) {
@@ -51,7 +52,14 @@
 			one : 'one'
 		};
 		c$.overlay.removeClass( 'wpsc-hide' );
+
 		c$.modal.html( notifs.modal( data ) ).removeClass( 'wpsc-hide' );
+
+		// Now that it's open, calculate it's inner height...
+		var newHeight = c$.modal.find( '.wpsc-cart-notification-inner' ).outerHeight();
+
+		// And set the height of the modal to match.
+		c$.modal.height( Math.round( newHeight ) );
 	};
 
 

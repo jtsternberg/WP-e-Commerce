@@ -1,5 +1,5 @@
 /*******************
-Variables 
+Variables
 *******************/
 
 /* Typography */
@@ -15,11 +15,19 @@ $cart_item-total_width: 10%;
 
 $cart_border: 1px solid #ccc;
 
-/*Product Grid*/
+/* Product Grid */
 $grid_margin: 2.5%;
-$columns-2: 50% - $grid_margin; 
+$columns-2: 50% - $grid_margin;
 $columns-3: 33.333% - $grid_margin;
 $columns-4: 25% - $grid_margin;
 $columns-5: 20% - $grid_margin;
 $columns-6: 16.666% - $grid_margin;
 $full-width: 100%;
+
+/* Mixins */
+
+@mixin wpsc-cart-item() {
+	display: block;
+	padding: 20px 0;
+	border-top: $cart_border;
+}

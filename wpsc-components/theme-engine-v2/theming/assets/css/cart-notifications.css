@@ -1,5 +1,21 @@
 /*******************
-Variables 
+Global Classes
+*******************/
+
+.wpsc-clearfix:after,
+.wpsc-cart-notification-inner:after,
+.wpsc-totals-table:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.wpsc-hide {
+	display: none;
+}
+
+/*******************
+Variables
 *******************/
 
 /* Typography */
@@ -8,19 +24,17 @@ Variables
 
 /* value x 4 i.e. 2.5 x 4 = 10% */
 
-/*Product Grid*/
+/* Product Grid */
 
-.wpsc-hide {
-	display: none;
-}
+/* Mixins */
 
 #wpsc-cart-notification {
 	position: fixed;
-	top: 20%;
+	top: 10%;
 	left: 50%;
 	margin-left: -364px;
 	width: 728px;
-	height: 250px;
+	height: 450px;
 	z-index: 160000;
 	border: 1px solid #ccc;
 	background: #fff;
@@ -28,6 +42,53 @@ Variables
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	padding: 20px;
+}
+
+.wpsc-cart-notification-inner {
+	overflow: hidden;
+}
+
+.wpsc-close-modal {
+	cursor: pointer;
+}
+
+.wpsc-close-modal.wpsc-icon-remove {
+	color: transparent;
+	width: 1em;
+	height: 1em;
+	display: block;
+	text-align: center;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.wpsc-close-modal.wpsc-icon-remove:before {
+	color: initial;
+}
+
+.wpsc-cart-what-was-added {
+	width: 40%;
+	float: left;
+	padding: 0 20px 0 0;
+}
+
+.wpsc-confirmation-message .wpsc-icon-check {
+	line-height: 0em;
+	font-size: 1.4em;
+	padding-right: 7px;
+}
+
+.wpsc-products-review {
+	display: block;
+	padding: 20px 0;
+	border-top: 1px solid #ccc;
+}
+
+.wpsc-confirmation-totals {
+	width: 60%;
+	float: right;
+	padding: 0 0 0;
 }
 
 .wpsc-product-review-thumb {
@@ -48,16 +109,32 @@ Variables
 	float: right;
 }
 
-#wpsc-what-was-added {
-	width: 50%;
-	float: left;
-	padding: 0 20px 0 0;
+.wpsc-cart-status {
+	font-weight: bold;
 }
 
-#wpsc-confirmation-totals {
-	width: 50%;
-	float: right;
-	padding: 0 0 0;
+.wpsc-totals-row-label {
+	width: 68%;
+	float: left;
+	padding-right: 2%;
+	clear: both;
+}
+
+.wpsc-totals-row-total {
+	width: 30%;
+	float: left;
+}
+
+.wpsc-cart-notification-actions {
+	text-align: right;
+}
+
+.wpsc-cart-notification-actions button {
+	font-size: .8em;
+}
+
+.wpsc-cart-notification-actions button:first-child {
+	float: left;
 }
 
 #wpsc-modal-overlay {

@@ -1,27 +1,70 @@
+@import 'partials/globals';
 @import 'partials/variables';
-
-.wpsc-hide {
-	display: none;
-}
 
 #wpsc-cart-notification {
 	position: fixed;
-	top: 20%;
+	top: 10%;
 	left: 50%;
 	margin-left: -364px;
 	width: 728px;
-	height: 250px;
+	height: 450px;
 	z-index: 160000;
-
 	border: $cart_border;
-
 	background: #fff;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-
 	padding: 20px;
+}
 
+.wpsc-cart-notification-inner {
+	overflow: hidden;
+	@extend .wpsc-clearfix;
+}
+
+.wpsc-close-modal {
+
+	cursor: pointer;
+
+	&.wpsc-icon-remove {
+
+		color: transparent;
+		width: 1em;
+		height: 1em;
+		display: block;
+		text-align: center;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+
+		&:before {
+			color: initial;
+		}
+	}
+}
+
+.wpsc-cart-what-was-added {
+	width: 40%;
+	float: left;
+	padding: 0 20px 0 0;
+}
+
+.wpsc-confirmation-message {
+	.wpsc-icon-check {
+		line-height: 0em;
+		font-size: 1.4em;
+		padding-right: 7px;
+	}
+}
+
+.wpsc-products-review {
+	@include wpsc-cart-item();
+}
+
+.wpsc-confirmation-totals {
+	width: 60%;
+	float: right;
+	padding: 0 0 0;
 }
 
 .wpsc-product-review-thumb {
@@ -41,15 +84,34 @@
 	float: right;
 }
 
-#wpsc-what-was-added {
-	width: 50%;
-	float: left;
-	padding: 0 20px 0 0;
+.wpsc-cart-status {
+	font-weight: bold;
 }
-#wpsc-confirmation-totals {
-	width: 50%;
-	float: right;
-	padding: 0 0 0;
+
+.wpsc-totals-table {
+	@extend .wpsc-clearfix;
+}
+
+.wpsc-totals-row-label {
+	width: 68%;
+	float: left;
+	padding-right: 2%;
+	clear: both;
+}
+
+.wpsc-totals-row-total {
+	width: 30%;
+	float: left;
+}
+
+.wpsc-cart-notification-actions {
+	text-align: right;
+	button {
+		font-size: .8em;
+		&:first-child {
+			float: left;
+		}
+	}
 }
 
 #wpsc-modal-overlay {
