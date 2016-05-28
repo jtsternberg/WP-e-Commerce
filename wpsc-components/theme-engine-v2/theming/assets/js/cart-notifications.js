@@ -74,8 +74,6 @@
 
 		initialize: function() {
 			this.status = new notifs.models.Status( notifs._cartStatus );
-			this.status.set( 'numberAdded', 1 );
-			this.status.set( 'numberItems', this.collection.length );
 
 			this.listenTo( this.collection, 'remove', this.checkEmpty );
 			this.listenTo( this.collection, 'render', this.render );
@@ -99,14 +97,16 @@
 
 			c$.overlay.removeClass( 'wpsc-hide' );
 
-			log( 'this.status.toJSON()', this.status.toJSON() );
-			log( 'this.collection.toJSON()', this.collection.toJSON() );
 			this.$el.html( this.template( this.status.toJSON() ) ).removeClass( 'wpsc-hide' );
 
 			this.$el.find( '.wpsc-cart-what-was-added' ).append( addedElements );
 
 			// Now that it's open, calculate it's inner height...
 			var newHeight = this.$el.find( '.wpsc-cart-notification-inner' ).outerHeight();
+
+			var winHeight = $( window ).height();
+			var maxHeight = winHeight - ( winHeight * 0.3 );
+			newHeight = newHeight > maxHeight ? maxHeight : newHeight;
 
 			// And set the height of the modal to match.
 			this.$el.height( Math.round( newHeight ) );
@@ -123,7 +123,7 @@
 		maybeUpdateView: function( modelChanged ) {
 			if ( modelChanged.changed.numberAdded || modelChanged.changed.numberItems ) {
 				log( 'modelChanged', modelChanged );
-				this.render();
+				// this.render();
 			}
 		},
 
@@ -140,7 +140,9 @@
 		update: function( data ) {
 			var model = this.collection.create( data );
 
-			log( 'data', data, model );
+			var prevNumber = this.status.get( 'numberItems' );
+			this.status.set( 'numberItems', this.collection.length );
+			this.status.set( 'numberAdded', this.status.get( 'numberItems' ) - prevNumber );
 
 			this.render();
 
@@ -230,7 +232,30 @@
 
 	notifs.evtOpen = function( evt ) {
 		evt.preventDefault();
-		notifs.openModal();
+		var $this    = $( this );
+		var $product = $this.parents( '.wpsc-product' );
+		var $thumb = $product.find( '.wpsc-product-thumbnail' );
+		var product = {
+			id         : 0,
+			url        : '',
+			price      : '',
+			title      : '',
+			thumb      : '',
+			quantity   : 0,
+			remove_url : '',
+			variations : []
+		};
+
+		product.id    = $product.attr( 'id' ).split( '-' ).pop();
+		product.url   = $thumb.length ? $thumb.attr( 'href' ) : $product.find( '.wpsc-product-title > a' ).attr( 'href' );
+		product.price = $product.find( '.wpsc-product-price .wpsc-sale-price .wpsc-amount' ).length ? $product.find( '.wpsc-product-price .wpsc-sale-price .wpsc-amount' ).text() : $product.find( '.wpsc-product-price .wpsc-amount' ).last().text();
+		product.title = $product.find( '.wpsc-product-title > a' ).text();
+		product.thumb = $thumb.length ? $product.find( '.wpsc-product-thumbnail' ).html() : '';
+		product.quantity = $product.find( '[name="quantity"]' ).val();
+
+
+		notifs.CartView.trigger( 'update', product );
+		// notifs.openModal( product );
 	};
 
 	notifs.closeModal = function() {
