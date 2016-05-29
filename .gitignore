@@ -18,3 +18,4 @@ node_modules
 .git
 release.sh
 *.css.map
+notes.md
