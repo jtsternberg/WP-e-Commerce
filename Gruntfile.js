@@ -5,7 +5,12 @@ module.exports = function( grunt ) {
 
 	require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
 
+	var bannerTemplate = '/**\n' + ' * <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' + ' * <%= pkg.author.url %>\n' + ' *\n' + ' * Copyright (c) <%= grunt.template.today("yyyy") %>;\n' + ' * Licensed GPLv2+\n' + ' */\n';
+
+	var compactBannerTemplate = '/** ' + '<%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> | <%= pkg.author.url %> | Copyright (c) <%= grunt.template.today("yyyy") %>; | Licensed GPLv2+' + ' **/\n';
+
 	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
 
 		asciify: {
 			banner: {
@@ -45,21 +50,32 @@ module.exports = function( grunt ) {
 			watch: {
 				src : [
 					'Gruntfile.js',
-					'wpsc-components/theme-engine-v2/theming/assets/js/*.js',
+					'wpsc-components/theme-engine-v2/theming/assets/js/**/*.js',
 					'!wpsc-components/theme-engine-v2/theming/assets/js/jquery.select-to-autocomplete.js',
+					'!wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js',
 					'!**/*.min.js'
 				]
 			}
 		},
 
+		browserify: {
+			options: {
+				banner: bannerTemplate,
+				stripBanners: true,
+				transform: [
+					'babelify',
+					'browserify-shim'
+				]
+			},
+			dist: { files: {
+				'wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js' : 'wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js'
+			} }
+		},
+
 		uglify: {
 			all: {
 				options: {
-					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-					// 	' * <%= pkg.homepage %>\n' +
-					// 	' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-					// 	' * Licensed GPLv2+' +
-					// 	' */\n',
+					banner: compactBannerTemplate,
 					mangle: false
 				},
 				files: [{
@@ -198,8 +214,8 @@ module.exports = function( grunt ) {
 	});
 
 	grunt.registerTask('css', ['asciify', 'sass', 'cmq', 'cssmin']);
-	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
-	grunt.registerTask('watchjs', ['asciify', 'jshint:watch', 'uglify:watch']);
+	grunt.registerTask('js', ['asciify', 'jshint', 'browserify', 'uglify']);
+	grunt.registerTask('watchjs', ['asciify', 'jshint:watch', 'browserify', 'uglify:watch']);
 	grunt.registerTask('default', ['asciify', 'js', 'css', 'makepot']);
 
 	/**
