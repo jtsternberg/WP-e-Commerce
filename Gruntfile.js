@@ -73,11 +73,11 @@ module.exports = function( grunt ) {
 		},
 
 		uglify: {
+			options: {
+				banner: compactBannerTemplate,
+				mangle: false
+			},
 			all: {
-				options: {
-					banner: compactBannerTemplate,
-					mangle: false
-				},
 				files: [{
 					expand: true,
 					cwd: 'wpsc-components/theme-engine-v2/theming/assets/js',
@@ -87,7 +87,13 @@ module.exports = function( grunt ) {
 				}]
 			},
 			watch : {
-
+				files: [{
+					expand: true,
+					cwd: 'wpsc-components/theme-engine-v2/theming/assets/js',
+					src: ['*.js', '!*.min.js'],
+					dest: 'wpsc-components/theme-engine-v2/theming/assets/js',
+					ext: '.min.js'
+				}]
 			}
 		},
 
