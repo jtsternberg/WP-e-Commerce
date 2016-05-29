@@ -104,6 +104,7 @@ function wpsc_get_form_output( $args ) {
 	$defaults = array(
 		'method'              => 'post',
 		'id'                  => "wpsc-form-{$form_id}",
+		'data-id'             => 0,
 		'class'               => 'wpsc-form wpsc-form-horizontal',
 		'before_field'        => '<div id="%1$s" class="%2$s">',
 		'after_field'         => '</div>',
@@ -125,7 +126,7 @@ function wpsc_get_form_output( $args ) {
 
 	$r = wp_parse_args( $args, $defaults );
 
-	$output = "<form id='{$r['id']}' method='{$r['method']}' action='{$r['action']}' class='{$r['class']}'>";
+	$output = "<form id='{$r['id']}' data-id='{$r['data-id']}' method='{$r['method']}' action='{$r['action']}' class='{$r['class']}'>";
 
 	foreach ( $r['fields'] as $field ) {
 		$output .= _wpsc_get_field_output( $field, $r );
