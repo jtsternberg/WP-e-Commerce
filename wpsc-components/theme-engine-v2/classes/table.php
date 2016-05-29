@@ -17,7 +17,9 @@ class WPSC_Table {
 	public function display_rows() {
 
 		foreach ( $this->items as $key => $item ) {
-			echo '<div class="wpsc-cart-item">';
+			$cart_class = isset( $item->product_id ) ? ' wpsc-cart-item-' . $item->product_id : '';
+
+			echo '<div class="wpsc-cart-item'. $cart_class .'">';
 			foreach( array_keys( $this->columns ) as $column ) {
 				$class = str_replace( '_', '-', $column );
 				echo '<div class="wpsc-cart-cell ' . $class . '">';
