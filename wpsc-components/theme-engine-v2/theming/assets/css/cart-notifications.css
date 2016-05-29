@@ -45,6 +45,18 @@ Variables
 	overflow: hidden;
 }
 
+.wpsc-cart-set-height .wpsc-cart-notification-inner,
+.wpsc-cart-set-height .wpsc-cart-table,
+.wpsc-cart-set-height .wpsc-cart-what-was-added,
+.wpsc-cart-set-height .wpsc-cart-body {
+	height: 100%;
+	overflow: hidden;
+}
+
+.wpsc-overflow .wpsc-cart-body {
+	overflow: scroll;
+}
+
 .wpsc-cart-notification-inner .wpsc-cart-cell.image {
 	width: 50%;
 	float: left;
@@ -58,24 +70,64 @@ Variables
 	margin-right: 10%;
 }
 
-.wpsc-cart-notification-inner .wpsc-cart-body {
-	display: block;
-	padding: 20px 0;
-	border-top: 1px solid #ccc;
-	padding-bottom: 0;
-}
-
-.wpsc-cart-notification-inner .wpsc-cart-item {
-	padding: 0;
-	border: 0;
+.wpsc-cart-notification-inner .wpsc-cart-item:first-child {
+	padding-top: 15px;
 }
 
 .wpsc-cart-notification-inner .wpsc-cart-item.wpsc-cart-no-thumb .wpsc-cart-cell.items {
 	width: 100%;
 }
 
-.wpsc-cart-notification-inner .wpsc-cart-item-row-actions small {
-	display: block;
+.wpsc-cart-notification-inner .wpsc-cart-item-row-actions {
+	line-height: initial;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-item-row-actions .wpsc-button {
+	display: inline-block;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-view-toggle {
+	float: right;
+}
+
+.wpsc-cart-notification-inner .wpsc-cart-view-toggle i {
+	cursor: pointer;
+}
+
+.wpsc-modal-normal-view.wpsc-cart-notification-inner .wpsc-cart-cell.image {
+	display: none;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-cell.items {
+	width: 100%;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-quantity,
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-item-total,
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-item-row-actions {
+	display: inline;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-quantity:after,
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-item-total:after {
+	content: ', ';
+}
+
+.wpsc-modal-normal-view .wpsc-cart-cell.items .wpsc-cart-item-details {
+	display: none;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-label,
+.wpsc-modal-normal-view .wpsc-cart-item-details {
+	display: none;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-item-row-actions .wpsc-button {
+	display: inline;
+}
+
+.wpsc-modal-normal-view .wpsc-cart-item-row-actions .wpsc-button span {
+	display: none;
 }
 
 .wpsc-close-modal {
@@ -103,13 +155,12 @@ Variables
 .wpsc-cart-what-was-added {
 	display: block;
 	position: relative;
-	overflow: scroll;
 	width: 40%;
 	float: left;
 	padding: 0 20px 0 0;
 }
 
-.wpsc-confirmation-message .wpsc-icon-check {
+.wpsc-confirmation-message .wpsc-cart-action-icon {
 	line-height: 0em;
 	font-size: 1.4em;
 	padding-right: 7px;

@@ -68,7 +68,7 @@ module.exports = function( grunt ) {
 				]
 			},
 			dist: { files: {
-				'wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js' : 'wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js'
+				'wpsc-components/theme-engine-v2/theming/assets/js/cart-notifications.js' : 'wpsc-components/theme-engine-v2/theming/assets/js/components/cart-notifications-main.js'
 			} }
 		},
 

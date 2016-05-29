@@ -184,7 +184,7 @@ class WPSC_Template_Engine {
 					'property_name' => 'cartNotifications',
 					'data' => array(
 						'_templates' => array(
-							'wpsc-modal-inner' => '_wpsc_cart_notifications_modal_underscores_template',
+							'wpsc-modal-inner' => '_wpsc_cart_notifications',
 						),
 					),
 				),
