@@ -161,7 +161,7 @@ class WPSC_Controller_Customer_Account extends WPSC_Controller {
 
 		wpsc_enqueue_script( 'wpsc-country-region' );
 		wpsc_enqueue_script( 'wpsc-copy-billing-info' );
-		_wpsc_enqueue_float_label_scripts();
+		wpsc_enqueue_script( 'wpsc-checkout' );
 
 		if ( isset( $_POST['action'] ) && $_POST['action'] == 'submit_customer_settings_form' ) {
 			$this->submit_customer_settings();

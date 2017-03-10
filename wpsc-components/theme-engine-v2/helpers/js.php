@@ -74,18 +74,6 @@ function _wpsc_cart_notifications() {
 	$cart_notifications->enqueue_css()->localize_data()->output_js_templates();
 }
 
-function _wpsc_enqueue_float_label_scripts() {
-    add_action(
-        'wp_enqueue_scripts',
-        '_wpsc_action_enqueue_float_label_scripts'
-    );
-}
-
-function _wpsc_action_enqueue_float_label_scripts() {
-    wpsc_enqueue_script( 'wpsc-float-labels' );
-    wpsc_enqueue_script( 'wpsc-checkout' );
-}
-
 function _wpsc_enqueue_product_scripts() {
     add_action(
         'wp_enqueue_scripts',
