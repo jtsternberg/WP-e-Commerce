@@ -14,19 +14,7 @@ Global Classes
 	display: none;
 }
 
-/*******************
-Variables
-*******************/
-
-/* Typography */
-
-/* Shopping Cart Single Product Cells (Needs to add up to 100%) */
-
 /* value x 4 i.e. 2.5 x 4 = 10% */
-
-/* Product Grid */
-
-/* Mixins */
 
 #wpsc-cart-notification {
 	position: fixed;
