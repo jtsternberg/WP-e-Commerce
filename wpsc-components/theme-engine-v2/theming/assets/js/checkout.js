@@ -1,9 +1,5 @@
 ;(function($) {
 	$('body').addClass( 'wpsc-float-js' );
 
-	$( '.wpsc-field-textfield' ).FloatLabel();
-	$( '.wpsc-field-select_region' ).FloatLabel();
-	$( '.wpsc-field-select_country' ).FloatLabel();
-	$( '.wpsc-field-password' ).FloatLabel();
-	$( '.wpsc-cc-field' ).FloatLabel();
+	$( '.wpsc-field-textfield, .wpsc-field-select_region, .wpsc-field-select_country, .wpsc-field-password, .wpsc-cc-field' ).FloatLabel();
 })(jQuery);

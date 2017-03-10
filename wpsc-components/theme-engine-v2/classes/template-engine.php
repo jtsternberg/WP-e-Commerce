@@ -195,22 +195,22 @@ class WPSC_Template_Engine {
 				),
 			),
 			'wpsc-float-labels' => array(
-				'path'         => 'js/jquery.FloatLabel.js',
+				'path'         => "js/floatlabel{$suffix}.js",
 				'dependencies' => array( 'jquery' ),
 				'version'      => WPSC_VERSION,
 			),
 			'wpsc-checkout' => array(
-				'path'         => 'js/checkout.js',
+				'path'         => "js/checkout{$suffix}.js",
 				'dependencies' => array( 'jquery', 'wpsc-float-labels' ),
 				'version'      => WPSC_VERSION,
 			),
 			'wpsc-fluidbox' => array(
-				'path'         => 'js/fluidbox.js',
+				'path'         => "js/fluidbox{$suffix}.js",
 				'dependencies' => array( 'jquery', 'underscore' ),
 				'version'      => WPSC_VERSION
 			),
 			'wpsc-products' => array(
-				'path'         => 'js/products.js',
+				'path'         => "js/products{$suffix}.js",
 				'dependencies' => array( 'jquery' ),
 				'version'      => WPSC_VERSION,
 			),
