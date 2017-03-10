@@ -110,7 +110,11 @@ add_filter( 'get_terms', 'wpsc_get_terms_category_sort_filter', 10, 3 );
 
 function wpsc_get_terms_variation_sort_filter( $terms ) {
 	$new_terms = array();
-	$unsorted = array();
+	$unsorted  = array();
+
+	if ( ! is_array( $terms ) ) {
+		return $terms;
+	}
 
 	foreach ( $terms as $term ) {
 		if ( ! is_object( $term ) ) {
@@ -146,7 +150,7 @@ function wpsc_get_terms_variation_sort_filter( $terms ) {
 	return array_values( $new_terms );
 }
 
-add_filter( 'get_terms','wpsc_get_terms_variation_sort_filter' );
+add_filter( 'get_terms','wpsc_get_terms_variation_sort_filter', 10 );
 
 /**
  * Hide Subcategory Products in Parent Category
@@ -154,7 +158,7 @@ add_filter( 'get_terms','wpsc_get_terms_variation_sort_filter' );
  * By default, taxonomy queries include posts assigned to child categories.
  * To disable this the taxonomy query needs to set `include_children` to false.
  *
- * @since   4.0
+ * @since   3.11.0
  * @access  private
  *
  * @param  WP_Query  $query  Query object.

@@ -30,8 +30,10 @@ class WPSC_Controller_Checkout extends WPSC_Controller {
 			wpsc_update_customer_meta( 'checkout_after_login', true );
 			if ( get_option( 'require_register' ) ) {
 				$this->view = 'checkout-login-required';
+				_wpsc_enqueue_float_label_scripts();
 			} else {
 				$this->view = 'checkout-login-prompt';
+				_wpsc_enqueue_float_label_scripts();
 			}
 		} else {
 			wp_redirect( wpsc_get_checkout_url( 'shipping-and-billing' ) );
@@ -178,6 +180,7 @@ class WPSC_Controller_Checkout extends WPSC_Controller {
 
 		wpsc_enqueue_script( 'wpsc-country-region' );
 		wpsc_enqueue_script( 'wpsc-copy-billing-info' );
+		_wpsc_enqueue_float_label_scripts();
 
 		$this->maybe_add_guest_account();
 
@@ -238,9 +241,16 @@ class WPSC_Controller_Checkout extends WPSC_Controller {
 		// otherwise create one
 		$purchase_log_id = (int) wpsc_get_customer_meta( 'current_purchase_log_id' );
 
+		$create = true;
+
 		if ( $purchase_log_id ) {
 			$purchase_log = new WPSC_Purchase_Log( $purchase_log_id );
-		} else {
+			$create       = ! $purchase_log->exists();
+		}
+
+		if ( $create ) {
+			wpsc_delete_customer_meta( 'current_purchase_log_id' );
+
 			$purchase_log = new WPSC_Purchase_Log();
 
 			$purchase_log->set( array(
@@ -248,9 +258,7 @@ class WPSC_Controller_Checkout extends WPSC_Controller {
 				'date'           => time(),
 				'plugin_version' => WPSC_VERSION,
 				'statusno'       => '0',
-			) );
-
-			$purchase_log->save();
+			) )->save();
 		}
 
 		return $purchase_log;
@@ -414,6 +422,7 @@ class WPSC_Controller_Checkout extends WPSC_Controller {
 
 	public function payment() {
 		$this->view = 'checkout-payment';
+		_wpsc_enqueue_float_label_scripts();
 
 		wpsc_enqueue_script( 'wpsc-checkout-payment' );
 

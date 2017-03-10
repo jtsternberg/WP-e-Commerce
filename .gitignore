@@ -17,5 +17,9 @@ node_modules
 .svn
 .git
 release.sh
-*.css.map
+wp-e-commerce-git
+wp-e-commerce-svn
+.sass-cache
+*.codekit
+
 notes.md

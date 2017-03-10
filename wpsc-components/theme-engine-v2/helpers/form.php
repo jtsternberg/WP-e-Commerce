@@ -128,6 +128,8 @@ function wpsc_get_form_output( $args ) {
 
 	$output = "<form id='{$r['id']}' data-id='{$r['data-id']}' method='{$r['method']}' action='{$r['action']}' class='{$r['class']}'>";
 
+	do_action( 'wpsc_get_form_output_before_form_fields', $r );
+
 	foreach ( $r['fields'] as $field ) {
 		$output .= _wpsc_get_field_output( $field, $r );
 	}
@@ -139,6 +141,8 @@ function wpsc_get_form_output( $args ) {
 	}
 
 	$output .= $r['after_form_actions'];
+
+	do_action( 'wpsc_get_form_output_after_form_fields', $r );
 
 	$output .= '</form>';
 
@@ -413,7 +417,7 @@ function _wpsc_filter_control_submit( $output, $field, $args ) {
 		$class .= ' wpsc-button-primary';
 	}
 
-	$output .= wpsc_form_submit( $name, $title, array( 'class' => $class ), false );
+	$output .= wpsc_form_submit( $name, $title, array( 'class' => $class, 'id' => $id ), false );
 
 	return $output;
 }
@@ -588,7 +592,9 @@ function wpsc_form_label( $label, $for = '', $atts = array(), $echo = true ) {
 		$atts['for'] = $for;
 	}
 
-	$output = '<label ' . _wpsc_form_attributes( $atts ) . '>' . $label . '</label>';
+	$output = '<label ' . _wpsc_form_attributes( $atts ) . '>'
+	. $label
+	. apply_filters( 'wpsc_form_input_append_to_label', '</label>', $atts );
 
 	if ( $echo ) {
 		echo $output;
@@ -637,7 +643,11 @@ function wpsc_form_checkbox( $name, $value, $label = false, $checked = false, $a
 	}
 
 	if ( $label ) {
-		$output = '<label class="wpsc-form-checkbox-wrapper">' . _wpsc_input_type_field( $atts, false ) . ' ' . $label . '</label>';
+		$output = '<label class="wpsc-form-checkbox-wrapper">'
+		. _wpsc_input_type_field( $atts, false )
+		. ' '
+		. $label
+		. apply_filters( 'wpsc_form_input_append_to_label', '</label>', $atts );
 		if ( ! $echo ) {
 			return $output;
 		}
@@ -685,7 +695,11 @@ function wpsc_form_radio( $name, $value, $label = false, $checked = false, $atts
 	}
 
 	if ( $label ) {
-		$output = '<label class="wpsc-form-radio-wrapper">' . _wpsc_input_type_field( $atts, false ) . ' ' . $label . '</label>';
+		$output = '<label class="wpsc-form-radio-wrapper">'
+		. _wpsc_input_type_field( $atts, false )
+		. ' '
+		. $label
+		. apply_filters( 'wpsc_form_input_append_to_label', '</label>', $atts );
 		if ( ! $echo ) {
 			return $output;
 		}

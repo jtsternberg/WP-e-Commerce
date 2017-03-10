@@ -141,11 +141,9 @@ function wpsc_default_customizer_settings( $settings ) {
             'priority'        => 12,
             'section'         => 'wpsc_layout',
             'label'           => __( 'Products Per Row' ),
-            'default'         => 'auto',
-            'description'     => __( 'Set the maximum number of products per row. Defaults to showing as many as will fit, up to six products per row', 'wp-e-commerce' ),
+            'default'         => '4',
+            'description'     => __( 'Set the maximum number of products per row. Defaults to showing 4 per row, up to six products per row', 'wp-e-commerce' ),
             'choices'         => apply_filters( 'wpsc_products_per_row_options', array(
-                'auto' => __( 'Automatic', 'wp-e-commerce' ),
-                '1'    => __( '1', 'wp-e-commerce' ),
                 '2'    => __( '2', 'wp-e-commerce' ),
                 '3'    => __( '3', 'wp-e-commerce' ),
                 '4'    => __( '4', 'wp-e-commerce' ),
@@ -156,8 +154,8 @@ function wpsc_default_customizer_settings( $settings ) {
         'setting' => array(
             'type'              => 'option',
             'capability'        => 'manage_options',
-            'default'           => 'auto',
-            'sanitize_callback' => 'wpsc_customizer_products_per_row',
+            'default'           => '4',
+            'sanitize_callback' => 'absint',
         ),
         'partial' => array(
             'selector'            => '#wpsc-products',
@@ -185,7 +183,7 @@ function wpsc_customizer_assets() {
 
     $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-    wp_enqueue_script( 'wpsc-customizer', wpsc_locate_asset_uri( 'js/customizer.js' ), array( 'customize-preview', 'jquery' ), WPSC_VERSION );
+    wp_enqueue_script( 'wpsc-customizer', wpsc_locate_asset_uri( 'js/customizer.js' ), array( 'jquery' ), WPSC_VERSION, true );
     wp_enqueue_style( 'wpsc-customizer' , wpsc_locate_asset_uri( "css/customizer{$suffix}.css" ), array(), WPSC_VERSION );
 }
 
@@ -194,9 +192,5 @@ add_action( 'customize_controls_enqueue_scripts', 'wpsc_customizer_assets' );
 function wpsc_customizer_render_products() {
     wpsc_get_template_part( 'loop', 'products' );
  }
-
-function wpsc_customizer_products_per_row( $value ) {
-    return $value === 'auto' || is_numeric( $value ) ? $value : 'auto';
-}
 
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-customizer.class.php' );

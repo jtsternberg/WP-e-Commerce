@@ -1,6 +1,10 @@
 <?php
 
-class WPSC_Coupon {
+/**
+ * WPSC Coupon Class.
+ * @since 3.8.2
+ */
+class WPSC_Coupon extends WPSC_Query_Base {
 
 	const IS_PERCENTAGE    = 1;
 	const IS_FREE_SHIPPING = 2;
@@ -12,41 +16,11 @@ class WPSC_Coupon {
 	 * to fetch a property with the same object.
 	 *
 	 * @access  private
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @var  int
 	 */
 	private $id = 0;
-
-	/**
-	 * Contains the values fetched from the DB.
-	 *
-	 * @access  private
-	 * @since   4.0
-	 *
-	 * @var  array
-	 */
-	private $data = array();
-
-	/**
-	 * True if the DB row is fetched into $this->data.
-	 *
-	 * @access  private
-	 * @since   4.0
-	 *
-	 * @var  boolean
-	 */
-	private $fetched = false;
-
-	/**
-	 * True if the row exists in DB.
-	 *
-	 * @access  private
-	 * @since   4.0
-	 *
-	 * @var  boolean
-	 */
-	private $exists = false;
 
 	/**
 	 * Names of columns that requires escaping values as integers before being inserted
@@ -54,7 +28,7 @@ class WPSC_Coupon {
 	 *
 	 * @access  private
 	 * @static
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @var  array
 	 */
@@ -68,12 +42,25 @@ class WPSC_Coupon {
 	 *
 	 * @access  private
 	 * @static
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @var  array
 	 */
 	private static $float_cols = array(
 		'value'
+	);
+
+	/**
+	 * An array of arrays of cache keys. Allows versioning the cached values,
+	 * and busting cache for a group if needed (by incrementing the version).
+	 *
+	 * @var array
+	 */
+	protected $group_ids = array(
+		'coupons' => array(
+			'group'   => 'wpsc_coupons',
+			'version' => 0,
+		),
 	);
 
 	/**
@@ -83,7 +70,7 @@ class WPSC_Coupon {
 	 * DB using the coupon id.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param  false|integer|array  $value  Optional. Defaults to false.
 	 */
@@ -103,13 +90,12 @@ class WPSC_Coupon {
 		$this->id = is_numeric( $value ) && $value > 0 ? absint( $value ) : 0;
 
 		// If the ID is specified, try to get from cache.
-		$this->data = wp_cache_get( $this->id, 'wpsc_coupons' );
+		$this->data = $this->cache_get( $this->id, 'coupons' );
 
 		// Cache exists
 		if ( ! empty( $this->data ) ) {
 			$this->fetched = true;
-			$this->exists = true;
-			return;
+			$this->exists  = true;
 		}
 
 	}
@@ -119,7 +105,7 @@ class WPSC_Coupon {
 	 * as arguments, or an associative array containing key value pairs.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param   string|array         $key    Name of the property (column), or an array containing key value pairs.
 	 * @param   string|integer|null  $value  Optional. Defaults to false. In case $key is a string, this should be specified.
@@ -149,54 +135,37 @@ class WPSC_Coupon {
 	}
 
 	/**
-	 * Returns the value of the specified property of the coupon.
+	 * Prepares the return value for get() (apply_filters, etc).
 	 *
-	 * @access  public
-	 * @since   4.0
+	 * @access protected
+	 * @since  3.11.5
 	 *
-	 * @param   string  $key  Name of the property (column).
-	 * @return  mixed
+	 * @param  mixed  $value Value fetched
+	 * @param  string $key   Key for $data.
+	 *
+	 * @return mixed
 	 */
-	public function get( $key ) {
-
-		// Lazy load the purchase log row if it's not fetched from the database yet.
-		if ( empty( $this->data ) || ! array_key_exists( $key, $this->data ) ) {
-			$this->fetch();
-		}
-
-		if ( isset( $this->data[ $key ] ) ) {
-			$value = $this->data[ $key ];
-		} else {
-			$value = null;
-		}
-
+	protected function prepare_get( $value, $key ) {
 		return apply_filters( 'wpsc_coupon_get_property', $value, $key, $this );
-
 	}
 
 	/**
-	 * Returns the whole database row in the form of an associative array.
+	 * Prepares the return value for get_data() (apply_filters, etc).
 	 *
-	 * @access  public
-	 * @since   4.0
+	 * @access protected
+	 * @since  3.11.5
 	 *
-	 * @return  array
+	 * @return mixed
 	 */
-	public function get_data() {
-
-		if ( empty( $this->data ) ) {
-			$this->fetch();
-		}
-
+	protected function prepare_get_data() {
 		return apply_filters( 'wpsc_coupon_get_data', $this->data, $this );
-
 	}
 
 	/**
 	 * Get the SQL query format for a column.
 	 *
 	 * @access  private
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param   string  $col  Name of the column.
 	 * @return  string        Placeholder.
@@ -220,7 +189,7 @@ class WPSC_Coupon {
 	 * $wpdb methods (update, insert etc.)
 	 *
 	 * @access  private
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param   array  $data
 	 * @return  array
@@ -241,10 +210,11 @@ class WPSC_Coupon {
 	 * Fetches the actual record from the database.
 	 *
 	 * @access  private
-	 * @since   4.0
+	 * @since   3.11.5
+	 *
+	 * @return WPSC_Coupon
 	 */
-	private function fetch() {
-
+	protected function fetch() {
 		global $wpdb;
 
 		if ( $this->fetched ) {
@@ -285,34 +255,18 @@ class WPSC_Coupon {
 
 		$this->fetched = true;
 
-	}
-
-	/**
-	 * Whether the DB row for this coupon exists.
-	 *
-	 * @access  public
-	 * @since   4.0
-	 *
-	 * @return  boolean  True if it exists. Otherwise false.
-	 */
-	public function exists() {
-
-		$this->fetch();
-		return $this->exists;
-
+		return $this;
 	}
 
 	/**
 	 * Update cache of the passed coupon object.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 */
 	public function update_cache() {
 
-		$id = $this->get( 'id' );
-
-		wp_cache_set( $id, $this->data, 'wpsc_coupons' );
+		$this->cache_set( $this->get( 'id' ), $this->data, 'coupons' );
 		do_action( 'wpsc_coupon_update_cache', $this );
 
 	}
@@ -321,11 +275,11 @@ class WPSC_Coupon {
 	 * Deletes cache of a coupon.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 */
 	public function delete_cache() {
 
-		wp_cache_delete( $this->get( 'id' ), 'wpsc_coupons' );
+		$this->cache_delete( $this->get( 'id' ), 'coupons' );
 		do_action( 'wpsc_coupon_delete_cache', $this );
 
 		$this->reset();
@@ -336,7 +290,7 @@ class WPSC_Coupon {
 	 * Saves the coupon back to the database.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 */
 	public function save() {
 
@@ -388,7 +342,7 @@ class WPSC_Coupon {
 	 * Deletes a coupon from the database.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -409,20 +363,6 @@ class WPSC_Coupon {
 		do_action( 'wpsc_coupon_delete', $this->id );
 
 		return $deleted;
-
-	}
-
-	/**
-	 * Reset Coupon
-	 *
-	 * Clears all the coupon data apart from the ID so any subsequent requests
-	 * will be refreshed.
-	 */
-	private function reset() {
-
-		$this->data = array();
-		$this->fetched = false;
-		$this->exists = false;
 
 	}
 
@@ -496,7 +436,7 @@ class WPSC_Coupon {
 	 * Checks if the current coupon is valid to use (expiry date, active, used).
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean  True if coupon is not expired, used and still active, false otherwise.
 	 */
@@ -553,7 +493,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon is active.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -567,7 +507,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon is a "Free shipping" coupon.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -581,7 +521,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon is a "percentage" coupon.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -595,7 +535,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon is a fixed amount coupon.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -609,7 +549,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon can only be used once.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -623,7 +563,7 @@ class WPSC_Coupon {
 	 * Check if a single use coupon is used.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -639,7 +579,7 @@ class WPSC_Coupon {
 	 * If the coupon can only be used once it will be marked as used and made inactive.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 */
 	public function used() {
 
@@ -655,7 +595,7 @@ class WPSC_Coupon {
 	 * Check whether this coupon can be applied to all items.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean
 	 */
@@ -669,7 +609,7 @@ class WPSC_Coupon {
 	 * Check whether the coupon has conditions.
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @return  boolean  True if there are conditions.
 	 */
@@ -685,7 +625,7 @@ class WPSC_Coupon {
 	 * Get Percentage Discount
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param   integer|double  $price  Price.
 	 * @return  integer|double          Discount amount.
@@ -706,7 +646,7 @@ class WPSC_Coupon {
 	 * Get Fixed Discount
 	 *
 	 * @access  public
-	 * @since   4.0
+	 * @since   3.11.5
 	 *
 	 * @param   int  $quantity  Discount multiplier.
 	 * @return  int             Discount amount.

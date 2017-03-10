@@ -2,7 +2,7 @@
 class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 
 	private $endpoints = array(
-		'sandbox' => 'https://gwapi.demo.securenet.com/api/',
+		'sandbox'    => 'https://gwapi.demo.securenet.com/api/',
 		'production' => 'https://gwapi.securenet.com/api/',
 	);
 
@@ -26,7 +26,7 @@ class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 		parent::__construct();
 
 		$this->title = __( 'WorldPay Payment Gateway', 'wp-e-commerce' );
-		$this->supports = array( 'default_credit_card_form', 'tev1' );
+		$this->supports = array( 'default_credit_card_form', 'tev1', 'tokenization' );
 
 		$this->order_handler	= WPSC_WorldPay_Payments_Order_Handler::get_instance( $this );
 
@@ -197,26 +197,12 @@ class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 	}
 
 	public function init() {
+		parent::init();
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
 		add_action( 'wp_head'           , array( $this, 'head_script' ) );
 
 		add_action( 'wpsc_inside_shopping_cart', array( $this, 'te_v1_insert_hidden_field' ) );
-
-		add_filter( 'wpsc_gateway_checkout_form_worldpay', array( $this, 'payment_fields' ) );
-	}
-
-	public function te_v2_show_payment_fields( $args ) {
-
-		$default = '<div class="wpsc-form-actions">';
-		ob_start();
-
-		$this->payment_fields();
-		$fields = ob_get_clean();
-
-		$args['before_form_actions'] = $fields . $default;
-
-		return $args;
 	}
 
 	public function process() {
@@ -250,7 +236,7 @@ class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 			default:
 
 				// Capture
-				$result = $this->capture_payment( $card_token );
+				$result = $this->capture_payment( $order, $card_token );
 
 				if ( $result ) {
 					// Payment complete
@@ -268,7 +254,7 @@ class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 
 	}
 
-	public function capture_payment( $token ) {
+	public function capture_payment( $log, $token ) {
 
 		if ( $this->purchase_log->get( 'gateway' ) == 'worldpay' ) {
 
@@ -405,7 +391,7 @@ class WPSC_Payment_Gateway_WorldPay extends WPSC_Payment_Gateway {
 		$digital = 0;
 
 		$log = new WPSC_Purchase_Log( $log_id );
-		$cart = $log->get_cart_contents();
+		$cart = $log->get_items();
 
 		foreach ( $cart as $cartitem ) {
 			$product_meta = get_post_meta( $cartitem->prodid, '_wpsc_product_metadata' );

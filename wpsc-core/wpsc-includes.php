@@ -5,9 +5,10 @@ if ( defined( 'WPEC_LOAD_DEPRECATED' ) && WPEC_LOAD_DEPRECATED ) {
 }
 
 // Start including the rest of the plugin here
-require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-logging.class.php'				);
+require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-logging.class.php'              );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-meta-util.php'                  );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-deprecated-meta.php'            );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/query-base.class.php'                );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/customer.php'                        );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-meta-customer.php'              );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-meta-visitor.php'               );
@@ -45,6 +46,7 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/currency.helpers.php'            
 require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log.helpers.php'            );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log-notification.class.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log.class.php'              );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/purchase-log-notes.class.php'        );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/checkout-form.class.php'             );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/checkout-form-data.class.php'        );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-theme-engine-bootstrap.php'     );
@@ -78,10 +80,13 @@ if ( is_admin() ) {
 	include_once( WPSC_FILE_PATH . '/wpsc-admin/admin.php' );
 }
 
-// Cron
-require_once( WPSC_FILE_PATH . '/wpsc-includes/cron.php' );
-
 // WP-CLI support
 if ( defined( 'WP_CLI' ) && WP_CLI && version_compare( phpversion(), '5.3', '>=' ) ) {
 	require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-wp-cli.php' );
 }
+
+// Tracking
+require_once( WPSC_FILE_PATH . '/wpsc-includes/wpsc-tracking.php' );
+
+// Cron
+require_once( WPSC_FILE_PATH . '/wpsc-includes/cron.php' );

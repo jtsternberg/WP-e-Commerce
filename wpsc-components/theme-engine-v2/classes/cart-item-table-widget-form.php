@@ -5,13 +5,13 @@ class WPSC_Cart_Item_Table_Widget_Form extends WPSC_Cart_Item_Table_Form {
 	public function __construct() {
 		parent::__construct();
 
-		$this->show_shipping     = false;
-		$this->show_tax          = false;
-		$this->show_total        = false;
-		$this->show_thumbnails   = false;
-		$this->show_coupon_field = false;
+		$this->show_shipping     	= false;
+		$this->show_tax          	= false;
+		$this->show_total        	= false;
+		$this->show_thumbnails   	= false;
+		$this->show_coupon_field 	= false;
+		$this->show_quantity_field	= true;
 
-		$this->columns['quantity'] = _x( 'Qty', 'quantity abbreviation', 'wp-e-commerce' );
 		unset( $this->columns['unit_price'] );
 	}
 
@@ -51,4 +51,6 @@ class WPSC_Cart_Item_Table_Widget_Form extends WPSC_Cart_Item_Table_Form {
 		</tr>
 		<?php
 	}
+
+
 }

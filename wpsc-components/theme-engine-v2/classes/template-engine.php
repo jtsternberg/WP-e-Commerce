@@ -171,9 +171,14 @@ class WPSC_Template_Engine {
 				'dependencies' => array( 'jquery' ),
 				'version'      => WPSC_VERSION,
 			),
+			'jquery-payment' => array(
+				'path'         => 'js/jquery.payment.min.js',
+				'dependencies' => array( 'jquery' ),
+				'version'      => WPSC_VERSION,
+			),
 			'wpsc-checkout-payment' => array(
 				'path'         => "js/checkout-payment{$suffix}.js",
-				'dependencies' => array( 'jquery' ),
+				'dependencies' => array( 'jquery', 'jquery-payment' ),
 				'version'      => WPSC_VERSION,
 			),
 			'wpsc-cart-notifications' => array(
@@ -189,6 +194,27 @@ class WPSC_Template_Engine {
 					),
 				),
 			),
+			'wpsc-float-labels' => array(
+				'path'         => 'js/jquery.FloatLabel.js',
+				'dependencies' => array( 'jquery' ),
+				'version'      => WPSC_VERSION,
+			),
+			'wpsc-checkout' => array(
+				'path'         => 'js/checkout.js',
+				'dependencies' => array( 'jquery', 'wpsc-float-labels' ),
+				'version'      => WPSC_VERSION,
+			),
+			'wpsc-fluidbox' => array(
+				'path'         => 'js/fluidbox.js',
+				'dependencies' => array( 'jquery', 'underscore' ),
+				'version'      => WPSC_VERSION
+			),
+			'wpsc-products' => array(
+				'path'         => 'js/products.js',
+				'dependencies' => array( 'jquery' ),
+				'version'      => WPSC_VERSION,
+			),
+
 		);
 
 	}

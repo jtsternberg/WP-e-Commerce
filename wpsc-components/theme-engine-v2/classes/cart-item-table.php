@@ -13,12 +13,13 @@ class WPSC_Cart_Item_Table extends WPSC_Table {
 		return self::$instance;
 	}
 
-	public $columns           = array();
-	public $show_shipping     = true;
-	public $show_tax          = true;
-	public $show_total        = true;
-	public $show_thumbnails   = true;
-	public $show_coupon_field = true;
+	public $columns              = array();
+	public $show_shipping        = true;
+	public $show_tax             = true;
+	public $show_total           = true;
+	public $show_thumbnails      = true;
+	public $show_coupon_field    = true;
+	public $show_quantity_field  = true;
 
 	public function __construct() {
 		global $wpsc_cart;
@@ -199,7 +200,7 @@ class WPSC_Cart_Item_Table extends WPSC_Table {
 	}
 
 	protected function column_quantity( $item, $key ) {
-		echo $item->quantity;
+		wpsc_form_input( "quantity[{$key}]", $item->quantity, array( 'class' => 'wpsc-cart-quantity-input', 'id' => "wpsc-cart-quantity-input-{$key}" ) );
 	}
 
 	protected function column_unit_price( $item ) {

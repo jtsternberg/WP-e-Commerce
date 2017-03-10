@@ -105,7 +105,7 @@ class Sputnik {
 	}
 
 	public static function add_download_link( $message, $notification ) {
-		$cart_contents = $notification->get_purchase_log()->get_cart_contents();
+		$cart_contents = $notification->get_purchase_log()->get_items();
 
 		$products = '';
 
@@ -149,7 +149,7 @@ class Sputnik {
 		if ( ! $display_to_screen )
 			return;
 
-		$cart_contents = $purchase_log_object->get_cart_contents();
+		$cart_contents = $purchase_log_object->get_items();
 
 		$products = '';
 
@@ -295,7 +295,7 @@ class Sputnik {
 	 */
 	public static function push_sales_data( $purchase_log_id, $current_status, $old_status, $purchase_log ) {
 
-		$purchase_log = new WPSC_Purchase_Log( $purchase_log_id );
+		$purchase_log = wpsc_get_order( $purchase_log_id );
 
 		$id = absint( $purchase_log->get( 'id' ) );
 
@@ -307,7 +307,7 @@ class Sputnik {
 			if ( empty( $pushed_to_saas ) ) {
 
 				$data          = $purchase_log->get_data();
-				$cart_contents = $purchase_log->get_cart_contents();
+				$cart_contents = $purchase_log->get_items();
 
 				// We want to push sales data - but naturally, IDs will differ, even names could potentially.
 				// So we add the slug to the object we POST
@@ -343,7 +343,7 @@ class Sputnik {
 
 		unset( $data['id'] );
 
-		$purchase_log = new WPSC_Purchase_Log( $data );
+		$purchase_log = wpsc_get_order( $data );
 		$purchase_log->save();
 		$purchase_log_id = $purchase_log->get( 'id' );
 

@@ -30,19 +30,25 @@ function _wpsc_filter_merchant_v2_get_gateway_list() {
 			<label><input type="radio" value="<?php echo wpsc_gateway_internal_name(); ?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway" />
 				<?php if ( ! empty( $gateway_name ) ) { ?>
 					<span class="custom_gateway_name"><?php echo $gateway_name; ?></span>
-				<?php } ?>
-				<?php
+				<?php }
+
 				if ( wpsc_show_gateway_image() ) :
 					$gateway_image = '<img src="' . esc_url( wpsc_gateway_image_url() ) . '" alt="' . esc_attr( $gateway_name ) . '" class="custom_gateway_image" />';
 					echo apply_filters( 'wpsc_gateway_image', $gateway_image, wpsc_gateway_internal_name() );
 				endif;
+
+				do_action( 'wpsc_gateway_v2_inside_gateway_label', wpsc_gateway_internal_name() );
 				?>
+
 			</label>
 			<?php if ( wpsc_gateway_form_fields() ) : ?>
 				<table class="wpsc_checkout_table <?php echo wpsc_gateway_form_field_style(); ?>">
 					<?php echo wpsc_gateway_form_fields(); ?>
 				</table>
-			<?php endif; ?>
+			<?php
+			endif;
+				do_action( 'wpsc_gateway_v2_inside_gateway_div', wpsc_gateway_internal_name() );
+			?>
 		</div>
 	<?php
 	endwhile;
@@ -254,7 +260,7 @@ add_action(
 function _wpsc_filter_merchant_v2_after_gateway_hidden_field() {
 	if ( wpsc_have_gateways() ) {
 		wpsc_the_gateway();
-		if ( wpsc_gateway_form_fields() ) : ?>
+		if ( wpsc_gateway_form_fields() && ! wpsc_is_free_cart() ) : ?>
 			<table class='wpsc_checkout_table <?php echo wpsc_gateway_form_field_style();?>'>
 				<?php echo wpsc_gateway_form_fields(); ?>
 			</table>

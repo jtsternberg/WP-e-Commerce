@@ -85,9 +85,6 @@
 			stop : category_sort
 		});
 
-		$('#edittag').attr('enctype', 'multipart/form-data').attr('encoding', 'multipart/form-data');
-		$('.edit-tags-php form').attr('enctype', 'multipart/form-data').attr('encoding', 'multipart/form-data');
-
 		$('[name="image"]').on('change', function() {
 			var t = $(this);
 
@@ -165,7 +162,6 @@
 
 		return false;
 	});
-
 }(jQuery));
 
 jQuery(document).ready(function($){
@@ -354,7 +350,7 @@ jQuery(document).ready(function($){
 		});
 	};
 
-	if (limited_stock_checkbox.size() > 0) {
+	if (limited_stock_checkbox.length > 0) {
 		toggle_stock_fields(limited_stock_checkbox.is(':checked'));
 	}
 
@@ -420,7 +416,7 @@ jQuery(document).ready(function($){
 
 	jQuery('.coupon-conditions').on( 'click', '.wpsc-button-minus', function() {
 		var parent = jQuery(this).closest('.coupon-condition'),
-			conditions_count = jQuery('.coupon-condition').size(),
+			conditions_count = jQuery('.coupon-condition').length,
 			prototype;
 
 		if ( jQuery( this ).index( jQuery( '.wpsc-button-minus' ) ) === 0 ) {
@@ -487,7 +483,7 @@ jQuery(document).ready(function($){
 
 
 // Remove new/empty custom meta input row
-function wpsc_remove_empty_meta( caller ){
+function wpsc_remove_empty_meta( caller ) {
 	jQuery(caller).closest('tr').remove();
 
 	wpsc_update_product_details_metabox_live_title();
